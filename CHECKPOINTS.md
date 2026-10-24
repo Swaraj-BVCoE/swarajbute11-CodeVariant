@@ -129,3 +129,30 @@ Checkpoint 3 will add the complete three-step create/edit form, draft recovery, 
 ### Next checkpoint
 
 Checkpoint 4 will add Blocker Recheck, Shrink the Dream, repeatable revival decisions, and status/timeline consistency. Do not start it without explicit approval.
+
+## Pre–Checkpoint 4 interface redesign — Linux desktop environment
+
+**Status:** Completed on 24 October 2026.
+
+### Completed work
+
+- Reframed the existing React application as a bright Linux-inspired desktop without replacing its routes, archive context, repository, or forms.
+- Added draggable, focusable application windows with working minimize, maximize, restore, and close controls.
+- Added a top system panel, searchable application/project launcher, desktop shortcuts, dock, two workspaces, context menu, appearance settings, and a functional project-aware terminal.
+- Connected dock, launcher, shortcut, and terminal actions to the existing React Router routes.
+- Added saved wallpaper preferences and retained a touch-friendly, full-screen mobile presentation.
+- Generated and integrated a transparent 3D Project Graveyard logo as the application identity and favicon.
+- Added restrained 3D presentation through an on-demand hero scene, project detail artifact, CSS perspective cards, lightweight card artifacts, and a custom fine-pointer cursor.
+- Replaced the always-running multi-renderer card/background approach with CSS 3D geometry and lazy-loaded Three.js scenes to reduce memory use and improve initial loading.
+- Preserved project creation, editing, deletion, search, filtering, persistence, draft recovery, timeline history, and Memory Capsules.
+
+### Checks completed
+
+- \`pnpm typecheck\` — passed.
+- \`pnpm lint\` — passed with no warnings.
+- \`pnpm test\` — 14 tests passed.
+- \`pnpm build\` — passed; Three.js now builds as an on-demand shared chunk.
+
+### Preview note
+
+- Vite runs at \`http://localhost:5173/\`. The original preview failure was a stopped development process followed by memory exhaustion from multiple simultaneous WebGL renderers. The render load has been reduced and the server relaunched. Automated in-app browser inspection remains unavailable because the browser-control transport closed and the environment blocked a separate localhost probe.

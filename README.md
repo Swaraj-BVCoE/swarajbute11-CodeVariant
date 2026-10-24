@@ -8,6 +8,8 @@ The Project Graveyard is a reflective archive for unfinished ideas. It helps peo
 
 Checkpoint 3 provides the complete local project-management journey: a validated three-step form, create-form draft recovery, dirty-navigation protection, project details, history-preserving edits, deletion confirmation, Memory Capsules, and timeline events.
 
+The current frontend presents that workflow as a bright Linux-inspired desktop environment. Existing routes and project data open through movable application windows, desktop shortcuts, a searchable launcher, a dock, workspace switching, a functional terminal utility, appearance preferences, and responsive mobile views. The generated Project Graveyard brand mark is stored locally under \`public/brand/\`.
+
 ## Run locally
 
 Requirements: Node.js 20.19+ or 22.12+ and pnpm.
@@ -61,7 +63,7 @@ The three steps capture the original idea, completed and unfinished work, presen
 ```text
 src/
   app/          Application routing
-  components/   Layout and shared UI primitives
+  components/   Desktop shell, 3D scenes, layout, and shared UI primitives
   data/         Seed records and persistence implementation
   domain/       Typed project model
   features/     Archive state, filters, and UI

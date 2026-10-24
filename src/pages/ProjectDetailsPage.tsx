@@ -1,5 +1,5 @@
 import { Archive, ArrowLeft, CheckCircle2, Circle, Clock3, ExternalLink, MemoryStick, Pencil, Sparkles, Trash2, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { abandonmentReasonLabels } from "../domain/project";
 import { useArchive } from "../features/archive/ArchiveContext";
@@ -9,6 +9,8 @@ import { PageHeader } from "../components/layout/PageHeader";
 import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { Card, CardContent, CardHeader } from "../components/ui/Card";
+
+const ProjectArtifact3D = lazy(() => import("../components/3d/ProjectArtifact3D").then((module) => ({ default: module.ProjectArtifact3D })));
 
 function formatDate(value?: string, includeTime = false) {
   if (!value) return "Not recorded";
@@ -133,9 +135,22 @@ export function ProjectDetailsPage() {
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.28fr)_minmax(21rem,0.72fr)]">
           <div className="space-y-6">
-            <Card>
+            <Card className="overflow-hidden border-indigo-100/80 bg-gradient-to-b from-white via-white to-indigo-50/20">
+              {/* 3D Interactive Project Artifact Hero Section */}
+              <div className="relative flex h-60 w-full items-center justify-center overflow-hidden border-b border-indigo-100/60 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
+                <div className="pointer-events-none absolute -left-12 -top-12 size-48 rounded-full bg-cyan-500/20 blur-3xl" />
+                <div className="pointer-events-none absolute -right-12 -bottom-12 size-48 rounded-full bg-pink-500/20 blur-3xl" />
+                <div className="relative size-48">
+                  <Suspense fallback={<div className="size-full animate-pulse rounded-full bg-indigo-400/20" />}><ProjectArtifact3D seed={project.id} /></Suspense>
+                </div>
+                <div className="absolute bottom-3 left-4 flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[0.7rem] font-medium text-slate-300 backdrop-blur-md">
+                  <span className="size-1.5 animate-pulse rounded-full bg-emerald-400" />
+                  Interactive 3D Idea Artifact
+                </div>
+              </div>
+
               <CardHeader>
-                <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#606E54]">
+                <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em] text-indigo-600">
                   Original Intention
                 </p>
                 <h2 className="mt-1 font-display text-2xl font-medium text-[#252724]">
