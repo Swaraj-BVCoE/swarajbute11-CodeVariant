@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b --pretty false",
+    "build": "vite build",
+    "typecheck": "node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc -b --pretty false",
     "lint": "eslint .",
     "test": "vitest run",
     "preview": "vite preview"

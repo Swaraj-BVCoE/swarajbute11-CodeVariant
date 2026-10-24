@@ -500,7 +500,7 @@ export function ReflectionStation({ project, onUpdateProject }: ReflectionStatio
                     <span className="block text-xs font-bold text-slate-800">
                       {opt.label}
                     </span>
-                    <Badge variant="zinc" className="mt-1 text-[10px]">
+                    <Badge variant="neutral" className="mt-1 text-[10px]">
                       {opt.badge}
                     </Badge>
                   </button>

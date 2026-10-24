@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useArchive } from '../../features/archive/ArchiveContext';
-import { UserStats } from '../../components/dashboard/UserStats';
-import { RecentActivity } from '../../components/dashboard/RecentActivity';
-import { Recommendations } from '../../components/dashboard/Recommendations';
+import { useArchive } from '../features/archive/ArchiveContext';
+import type { Project } from '../domain/project';
+import { UserStats } from '../components/dashboard/UserStats';
+import { RecentActivity } from '../components/dashboard/RecentActivity';
+import { Recommendations } from '../components/dashboard/Recommendations';
 
 export function Dashboard() {
   const { projects } = useArchive();
@@ -10,9 +11,9 @@ export function Dashboard() {
 
   useEffect(() => {
     const total = projects.length;
-    const active = projects.filter(p => p.status === 'active').length;
-    const paused = projects.filter(p => p.status === 'paused').length;
-    const completed = projects.filter(p => p.status === 'completed').length;
+    const active = projects.filter((p: Project) => p.status === 'reviving').length;
+    const paused = projects.filter((p: Project) => p.status === 'paused').length;
+    const completed = projects.filter((p: Project) => p.status === 'archived').length;
     setStats({ total, active, paused, completed });
   }, [projects]);
 
