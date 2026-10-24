@@ -9,14 +9,24 @@ type PageHeaderProps = {
 
 export function PageHeader({ eyebrow, title, description, action }: PageHeaderProps) {
   return (
-    <div className="page-header-premium relative flex flex-col gap-6 overflow-hidden border-b border-white/10 px-5 py-8 sm:px-8 sm:py-11 xl:flex-row xl:items-end xl:justify-between xl:px-12">
-      <div className="relative z-10 max-w-3xl">
-        {eyebrow && <p className="mb-3 flex items-center gap-2 text-[0.67rem] font-black uppercase tracking-[0.24em] text-[#ffb17a]"><span className="h-px w-7 bg-[#ff6b24]" />{eyebrow}</p>}
-        <h1 className="font-display text-4xl font-bold leading-[0.98] tracking-[-0.055em] text-[#fffaf0] sm:text-5xl xl:text-[3.7rem]">{title}</h1>
-        <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base sm:leading-7">{description}</p>
+    <div className="page-header-premium relative border-b border-[#E6E4DD] px-6 py-9 sm:px-10 sm:py-12 xl:px-14">
+      <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+        <div className="max-w-3xl">
+          {eyebrow && (
+            <p className="mb-2.5 flex items-center gap-2 text-[0.7rem] font-bold uppercase tracking-[0.18em] text-[#606E54]">
+              <span className="h-px w-5 bg-[#606E54]" />
+              {eyebrow}
+            </p>
+          )}
+          <h1 className="font-display text-3xl font-medium leading-[1.12] tracking-[-0.025em] text-[#252724] sm:text-4xl xl:text-[2.85rem]">
+            {title}
+          </h1>
+          <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-[#5C605A] sm:text-base">
+            {description}
+          </p>
+        </div>
+        {action && <div className="shrink-0 pt-2 xl:pt-0">{action}</div>}
       </div>
-      {action && <div className="relative z-10 shrink-0">{action}</div>}
-      <div className="header-sculpture" aria-hidden="true"><span /><span /><span /></div>
     </div>
   );
 }

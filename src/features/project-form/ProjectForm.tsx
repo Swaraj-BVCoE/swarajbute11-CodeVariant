@@ -25,8 +25,8 @@ type ProjectFormProps = {
 };
 
 const steps = [
-  { number: 1, label: "Original idea", note: "What you wanted to make" },
-  { number: 2, label: "Where you stopped", note: "Progress and present state" },
+  { number: 1, label: "Original idea", note: "What you wanted to create" },
+  { number: 2, label: "Stopping point", note: "Progress and present state" },
   { number: 3, label: "Why it paused", note: "Blocker and memory capsule" },
 ];
 
@@ -37,15 +37,44 @@ const stepFields: Record<number, FieldPath<ProjectFormValues>[]> = {
 };
 
 function Field({ label, hint, error, required, children }: { label: string; hint?: string; error?: string; required?: boolean; children: React.ReactNode }) {
-  return <label className="block"><span className="mb-2 flex items-center justify-between gap-3 text-sm font-semibold text-slate-200"><span>{label}{required && <span className="ml-1 text-[#ff9561]">*</span>}</span>{hint && <span className="text-xs font-normal text-slate-600">{hint}</span>}</span>{children}{error && <span className="mt-1.5 block text-xs text-rose-300" role="alert">{error}</span>}</label>;
+  return (
+    <label className="block">
+      <span className="mb-2 flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-wider text-[#5C605A]">
+        <span>
+          {label}
+          {required && <span className="ml-1 text-[#A45839]">*</span>}
+        </span>
+        {hint && <span className="text-[0.72rem] font-normal normal-case text-[#858780]">{hint}</span>}
+      </span>
+      {children}
+      {error && (
+        <span className="mt-1.5 block text-xs font-medium text-[#9E2A2B]" role="alert">
+          {error}
+        </span>
+      )}
+    </label>
+  );
 }
 
 function SectionIntro({ eyebrow, title, description }: { eyebrow: string; title: string; description: string }) {
-  return <div className="mb-7"><p className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#ff9c67]"><span className="h-px w-6 bg-[#ff6422]" />{eyebrow}</p><h2 className="mt-3 font-display text-3xl font-bold tracking-[-0.035em] text-[#fffaf0]">{title}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">{description}</p></div>;
+  return (
+    <div className="mb-8">
+      <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#606E54]">
+        <span className="h-px w-5 bg-[#606E54]" />
+        {eyebrow}
+      </p>
+      <h2 className="mt-2.5 font-display text-2xl font-medium tracking-[-0.02em] text-[#252724] sm:text-3xl">
+        {title}
+      </h2>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#5C605A]">
+        {description}
+      </p>
+    </div>
+  );
 }
 
 export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: ProjectFormProps) {
-  const draftLoad = useMemo(() => mode === "create" ? loadProjectDraft() : { ok: true as const, data: null }, [mode]);
+  const draftLoad = useMemo(() => (mode === "create" ? loadProjectDraft() : { ok: true as const, data: null }), [mode]);
   const [pendingDraft, setPendingDraft] = useState<ProjectDraft | null>(draftLoad.ok ? draftLoad.data : null);
   const [draftIssue, setDraftIssue] = useState(draftLoad.ok ? "" : draftLoad.message);
   const [draftMessage, setDraftMessage] = useState("");
@@ -73,7 +102,7 @@ export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: 
     if (mode !== "create" || pendingDraft || (!isDirty && !restoredDraft) || saved) return;
     const timer = setTimeout(() => {
       const result = saveProjectDraft(observedValues as ProjectFormValues);
-      setDraftMessage(result.ok ? "Draft saved in this browser" : result.message);
+      setDraftMessage(result.ok ? "Draft preserved locally" : result.message);
     }, 450);
     return () => clearTimeout(timer);
   }, [isDirty, mode, observedValues, pendingDraft, restoredDraft, saved]);
@@ -83,7 +112,7 @@ export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: 
     reset(pendingDraft.values);
     setPendingDraft(null);
     setRestoredDraft(true);
-    setDraftMessage("Draft restored — review it before preserving the project");
+    setDraftMessage("Draft restored — review before saving");
   };
 
   const discardDraft = () => {
@@ -123,65 +152,382 @@ export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: 
   return (
     <form onSubmit={handleSubmit(handleValidSubmit, handleInvalidSubmit)} noValidate>
       {(pendingDraft || draftIssue) && (
-        <div className="mb-5 flex flex-col gap-4 rounded-2xl border border-amber-300/15 bg-amber-400/[0.06] p-4 sm:flex-row sm:items-center sm:justify-between">
-          <div><p className="font-semibold text-amber-100">{pendingDraft ? "A saved draft is waiting" : "Draft recovery needs attention"}</p><p className="mt-1 text-sm text-slate-400">{pendingDraft ? `Last saved ${new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(pendingDraft.updatedAt))}.` : draftIssue}</p></div>
-          <div className="flex gap-2">{pendingDraft && <Button type="button" size="sm" onClick={restoreDraft}>Restore draft</Button>}<Button type="button" variant="secondary" size="sm" onClick={discardDraft}>Discard</Button></div>
+        <div className="mb-6 flex flex-col gap-4 rounded-xl border border-[#E4D8BE] bg-[#F8F4EC] p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-semibold text-[#252724]">
+              {pendingDraft ? "A previous draft was found" : "Draft notice"}
+            </p>
+            <p className="mt-0.5 text-xs text-[#5C605A]">
+              {pendingDraft
+                ? `Saved on ${new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(new Date(pendingDraft.updatedAt))}.`
+                : draftIssue}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {pendingDraft && (
+              <Button type="button" size="sm" onClick={restoreDraft}>
+                Restore draft
+              </Button>
+            )}
+            <Button type="button" variant="secondary" size="sm" onClick={discardDraft}>
+              Discard
+            </Button>
+          </div>
         </div>
       )}
 
-      <div className="mb-5 grid gap-2 rounded-[1.4rem] border border-white/10 bg-black/20 p-2 shadow-[inset_0_1px_rgba(255,255,255,.04)] sm:grid-cols-3">
-        {steps.map((item) => <button key={item.number} type="button" onClick={() => item.number < step && setStep(item.number)} className={cn("flex items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-300", step === item.number ? "bg-gradient-to-r from-[#ff6422]/20 to-[#ffd21c]/10 ring-1 ring-inset ring-[#ff8d4b]/25 shadow-[inset_0_1px_rgba(255,255,255,.05)]" : item.number < step ? "hover:bg-white/[0.05]" : "opacity-50")}><span className={cn("grid size-9 shrink-0 place-items-center rounded-full border text-xs font-black shadow-[inset_0_1px_rgba(255,255,255,.12)]", step === item.number ? "border-[#ffae79]/40 bg-[#ff6422] text-white shadow-[0_8px_20px_rgba(255,100,34,.2)]" : item.number < step ? "border-[#d8ff54]/25 bg-[#d8ff54]/10 text-[#eaff9f]" : "border-white/10 text-slate-500")}>{item.number < step ? <Check className="size-4" /> : item.number}</span><span><span className="block text-sm font-semibold text-slate-200">{item.label}</span><span className="hidden text-xs text-slate-600 xl:block">{item.note}</span></span></button>)}
+      {/* Stepper Navigation */}
+      <div className="mb-6 grid gap-2 rounded-xl border border-[#E6E4DD] bg-[#FFFFFF] p-2 shadow-xs sm:grid-cols-3">
+        {steps.map((item) => (
+          <button
+            key={item.number}
+            type="button"
+            onClick={() => item.number < step && setStep(item.number)}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3.5 py-3 text-left transition-all duration-200 cursor-pointer",
+              step === item.number
+                ? "bg-[#F3F2EE] border border-[#D8D6CE]"
+                : item.number < step
+                ? "hover:bg-[#FAF9F6]"
+                : "opacity-45 cursor-default",
+            )}
+          >
+            <span
+              className={cn(
+                "grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold",
+                step === item.number
+                  ? "bg-[#606E54] text-white"
+                  : item.number < step
+                  ? "bg-[#EBF0E6] text-[#606E54]"
+                  : "bg-[#EBEAE4] text-[#858780]",
+              )}
+            >
+              {item.number < step ? <Check className="size-3.5" /> : item.number}
+            </span>
+            <span>
+              <span className="block text-sm font-semibold text-[#252724]">{item.label}</span>
+              <span className="hidden text-xs text-[#858780] xl:block">{item.note}</span>
+            </span>
+          </button>
+        ))}
       </div>
 
       <Card className="overflow-hidden">
-        <CardContent className="p-5 sm:p-7 lg:p-9">
+        <CardContent className="p-6 sm:p-9">
           <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={step} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.18 }}>
-              {step === 1 && <>
-                <SectionIntro eyebrow="Step 1 of 3" title="Remember the original idea" description="Capture enough context that your future self can understand why this project mattered." />
-                <div className="grid gap-5">
-                  <Field label="Project name" required error={errors.name?.message}><Input {...register("name")} aria-invalid={Boolean(errors.name)} placeholder="e.g. Sunday Sketchbook" /></Field>
-                  <Field label="Short description" required hint={`${observedValues.shortDescription?.length ?? 0}/240`} error={errors.shortDescription?.message}><Textarea {...register("shortDescription")} aria-invalid={Boolean(errors.shortDescription)} rows={3} placeholder="A one-sentence explanation of the project…" /></Field>
-                  <Field label="What did you want to build?" required error={errors.intendedOutcome?.message}><Textarea {...register("intendedOutcome")} aria-invalid={Boolean(errors.intendedOutcome)} placeholder="Describe the original outcome or change you hoped to create…" /></Field>
-                  <Field label="Technologies" hint="Press Enter to add" error={errors.technologies?.message}><div className="flex gap-2"><Input value={technologyInput} onChange={(event) => setTechnologyInput(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); addTechnology(); } }} placeholder="React, Figma, Python…" /><Button type="button" variant="secondary" onClick={addTechnology}><Plus className="size-4" /> Add</Button></div><div className="mt-2 flex flex-wrap gap-2">{technologies.map((technology, index) => <Badge key={`${technology}-${index}`} variant="violet">{technology}<button type="button" aria-label={`Remove ${technology}`} onClick={() => setValue("technologies", technologies.filter((_, itemIndex) => itemIndex !== index), { shouldDirty: true, shouldValidate: true })}><X className="size-3" /></button></Badge>)}</div></Field>
-                  <div className="grid gap-5 sm:grid-cols-2"><Field label="Repository URL" error={errors.repositoryUrl?.message}><Input {...register("repositoryUrl")} aria-invalid={Boolean(errors.repositoryUrl)} inputMode="url" placeholder="https://github.com/…" /></Field><Field label="Demo URL" error={errors.demoUrl?.message}><Input {...register("demoUrl")} aria-invalid={Boolean(errors.demoUrl)} inputMode="url" placeholder="https://…" /></Field></div>
-                </div>
-              </>}
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.16 }}
+            >
+              {step === 1 && (
+                <>
+                  <SectionIntro
+                    eyebrow="Step 1 of 3"
+                    title="Remember the original idea"
+                    description="Capture enough context that your future self can immediately understand what made this idea exciting."
+                  />
+                  <div className="grid gap-6">
+                    <Field label="Project name" required error={errors.name?.message}>
+                      <Input {...register("name")} aria-invalid={Boolean(errors.name)} placeholder="e.g. Sunday Sketchbook" />
+                    </Field>
+                    <Field
+                      label="Short description"
+                      required
+                      hint={`${observedValues.shortDescription?.length ?? 0}/240`}
+                      error={errors.shortDescription?.message}
+                    >
+                      <Textarea
+                        {...register("shortDescription")}
+                        aria-invalid={Boolean(errors.shortDescription)}
+                        rows={2}
+                        placeholder="A one-sentence summary of the project…"
+                      />
+                    </Field>
+                    <Field label="What did you want to build?" required error={errors.intendedOutcome?.message}>
+                      <Textarea
+                        {...register("intendedOutcome")}
+                        aria-invalid={Boolean(errors.intendedOutcome)}
+                        rows={3}
+                        placeholder="Describe the intention, problem, or creative outcome you hoped to achieve…"
+                      />
+                    </Field>
+                    <Field label="Technologies & Tools" hint="Press Enter to add" error={errors.technologies?.message}>
+                      <div className="flex gap-2">
+                        <Input
+                          value={technologyInput}
+                          onChange={(event) => setTechnologyInput(event.target.value)}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                              event.preventDefault();
+                              addTechnology();
+                            }
+                          }}
+                          placeholder="TypeScript, Next.js, Figma, Rust…"
+                        />
+                        <Button type="button" variant="secondary" onClick={addTechnology}>
+                          <Plus className="size-4" /> Add
+                        </Button>
+                      </div>
+                      <div className="mt-2.5 flex flex-wrap gap-2">
+                        {technologies.map((technology, index) => (
+                          <Badge key={`${technology}-${index}`} variant="violet">
+                            {technology}
+                            <button
+                              type="button"
+                              aria-label={`Remove ${technology}`}
+                              onClick={() =>
+                                setValue(
+                                  "technologies",
+                                  technologies.filter((_, itemIndex) => itemIndex !== index),
+                                  { shouldDirty: true, shouldValidate: true },
+                                )
+                              }
+                              className="ml-1 text-[#5C605A] hover:text-[#252724]"
+                            >
+                              <X className="size-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    </Field>
+                    <div className="grid gap-6 sm:grid-cols-2">
+                      <Field label="Repository URL" error={errors.repositoryUrl?.message}>
+                        <Input
+                          {...register("repositoryUrl")}
+                          aria-invalid={Boolean(errors.repositoryUrl)}
+                          inputMode="url"
+                          placeholder="https://github.com/…"
+                        />
+                      </Field>
+                      <Field label="Demo URL" error={errors.demoUrl?.message}>
+                        <Input
+                          {...register("demoUrl")}
+                          aria-invalid={Boolean(errors.demoUrl)}
+                          inputMode="url"
+                          placeholder="https://…"
+                        />
+                      </Field>
+                    </div>
+                  </div>
+                </>
+              )}
 
-              {step === 2 && <>
-                <SectionIntro eyebrow="Step 2 of 3" title="Mark the exact stopping point" description="Separate what already exists from what still needs attention. This is a memory aid, not a task list." />
-                <div className="grid gap-7 lg:grid-cols-2">
-                  {([true, false] as const).map((completed) => <section key={String(completed)}><div className="mb-3 flex items-center justify-between"><p className={cn("flex items-center gap-2 text-sm font-semibold", completed ? "text-[#eaff9f]" : "text-[#ffc19e]")}>{completed ? <CheckCircle2 className="size-4" /> : <Circle className="size-4" />}{completed ? "Completed" : "Still unfinished"} <span className="text-slate-600">({completed ? completedCount : unfinishedCount})</span></p><Button type="button" variant="ghost" size="sm" onClick={() => workItems.append({ id: createStableId("work"), text: "", completed })}><Plus className="size-3.5" /> Add</Button></div><div className="space-y-2">{workItems.fields.map((field, index) => field.completed === completed && <div key={field.fieldKey}><div className="flex gap-2"><Input {...register(`workItems.${index}.text`)} aria-label={`${completed ? "Completed" : "Unfinished"} work item`} placeholder={completed ? "What already works?" : "What remains?"} /><Button type="button" variant="ghost" size="icon" onClick={() => workItems.remove(index)} aria-label="Remove work item"><Trash2 className="size-4" /></Button></div>{errors.workItems?.[index]?.text?.message && <p className="mt-1 text-xs text-rose-300">{errors.workItems[index]?.text?.message}</p>}</div>)}</div></section>)}
-                </div>
-                {typeof errors.workItems?.message === "string" && <p className="mt-2 text-xs text-rose-300">{errors.workItems.message}</p>}
-                <div className="mt-8 grid gap-5 border-t border-white/[0.07] pt-7 sm:grid-cols-3">
-                  <Field label="Current status" required error={errors.status?.message}><Select {...register("status")}>{projectStatuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}</Select></Field>
-                  <Field label="Started" error={errors.startDate?.message}><Input type="date" max={today} {...register("startDate")} /></Field>
-                  <Field label="Last worked" error={errors.lastWorkedDate?.message}><Input type="date" max={today} {...register("lastWorkedDate")} /></Field>
-                </div>
-              </>}
+              {step === 2 && (
+                <>
+                  <SectionIntro
+                    eyebrow="Step 2 of 3"
+                    title="Mark the exact stopping point"
+                    description="Separate what already works from what remains incomplete. This acts as a clear memory aid, not a stressful to-do list."
+                  />
+                  <div className="grid gap-7 lg:grid-cols-2">
+                    {([true, false] as const).map((completed) => (
+                      <section key={String(completed)} className="rounded-xl border border-[#E6E4DD] bg-[#FAF9F6] p-5">
+                        <div className="mb-4 flex items-center justify-between">
+                          <p className={cn("flex items-center gap-2 text-sm font-semibold", completed ? "text-[#606E54]" : "text-[#9E7D4E]")}>
+                            {completed ? <CheckCircle2 className="size-4" /> : <Circle className="size-4" />}
+                            <span>{completed ? "Completed" : "Still unfinished"}</span>
+                            <span className="text-xs font-normal text-[#858780]">({completed ? completedCount : unfinishedCount})</span>
+                          </p>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => workItems.append({ id: createStableId("work"), text: "", completed })}
+                          >
+                            <Plus className="size-3.5" /> Add item
+                          </Button>
+                        </div>
+                        <div className="space-y-2.5">
+                          {workItems.fields.map(
+                            (field, index) =>
+                              field.completed === completed && (
+                                <div key={field.fieldKey}>
+                                  <div className="flex gap-2">
+                                    <Input
+                                      {...register(`workItems.${index}.text`)}
+                                      aria-label={`${completed ? "Completed" : "Unfinished"} work item`}
+                                      placeholder={completed ? "What already works reliably?" : "What still needs attention?"}
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => workItems.remove(index)}
+                                      aria-label="Remove item"
+                                    >
+                                      <Trash2 className="size-4 text-[#858780]" />
+                                    </Button>
+                                  </div>
+                                  {errors.workItems?.[index]?.text?.message && (
+                                    <p className="mt-1 text-xs text-[#9E2A2B]">{errors.workItems[index]?.text?.message}</p>
+                                  )}
+                                </div>
+                              ),
+                          )}
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                  {typeof errors.workItems?.message === "string" && (
+                    <p className="mt-2 text-xs text-[#9E2A2B]">{errors.workItems.message}</p>
+                  )}
+                  <div className="mt-8 grid gap-6 border-t border-[#E6E4DD] pt-7 sm:grid-cols-3">
+                    <Field label="Current status" required error={errors.status?.message}>
+                      <Select {...register("status")}>
+                        {projectStatuses.map((status) => (
+                          <option key={status} value={status}>
+                            {statusLabels[status]}
+                          </option>
+                        ))}
+                      </Select>
+                    </Field>
+                    <Field label="Started" error={errors.startDate?.message}>
+                      <Input type="date" max={today} {...register("startDate")} />
+                    </Field>
+                    <Field label="Last worked" error={errors.lastWorkedDate?.message}>
+                      <Input type="date" max={today} {...register("lastWorkedDate")} />
+                    </Field>
+                  </div>
+                </>
+              )}
 
-              {step === 3 && <>
-                <SectionIntro eyebrow="Step 3 of 3" title="Leave yourself a useful memory" description="Name the blocker honestly, then record the clues that would make returning easier." />
-                <div className="grid gap-5 sm:grid-cols-2"><Field label="Why did work stop?" required error={errors.abandonmentReason?.message}><Select {...register("abandonmentReason")}>{abandonmentReasons.map((reason) => <option key={reason} value={reason}>{abandonmentReasonLabels[reason]}</option>)}</Select></Field><Field label="Supporting notes" error={errors.abandonmentNotes?.message}><Textarea {...register("abandonmentNotes")} rows={3} placeholder="What made this blocker matter at the time?" /></Field></div>
-                <div className="my-8 flex items-center gap-3"><span className="h-px flex-1 bg-white/[0.07]" /><Badge variant="violet">Project Memory Capsule</Badge><span className="h-px flex-1 bg-white/[0.07]" /></div>
-                <div className="grid gap-5 sm:grid-cols-2">
-                  <Field label="Last thing that worked" error={errors.memoryCapsule?.lastThingThatWorked?.message}><Textarea {...register("memoryCapsule.lastThingThatWorked")} rows={3} placeholder="What was working when you left?" /></Field>
-                  <Field label="Exact stopping point" error={errors.memoryCapsule?.exactStoppingPoint?.message}><Textarea {...register("memoryCapsule.exactStoppingPoint")} rows={3} placeholder="The precise screen, bug, question, or decision…" /></Field>
-                  <Field label="Suggested next step" error={errors.memoryCapsule?.suggestedNextStep?.message}><Textarea {...register("memoryCapsule.suggestedNextStep")} rows={3} placeholder="One small action that would restart momentum…" /></Field>
-                  <Field label="Note to my future self" error={errors.memoryCapsule?.noteToFutureSelf?.message}><Textarea {...register("memoryCapsule.noteToFutureSelf")} rows={3} placeholder="What would you want to remember before returning?" /></Field>
-                </div>
-                <section className="mt-6"><div className="mb-3 flex items-center justify-between"><p className="flex items-center gap-2 text-sm font-semibold text-slate-200"><Link2 className="size-4 text-[#ff9561]" /> Important links</p><Button type="button" variant="ghost" size="sm" onClick={() => importantLinks.append({ id: createStableId("link"), url: "" })}><Plus className="size-3.5" /> Add link</Button></div><div className="space-y-2">{importantLinks.fields.map((field, index) => <div key={field.fieldKey}><div className="flex gap-2"><Input {...register(`memoryCapsule.importantLinks.${index}.url`)} inputMode="url" aria-label="Important link" placeholder="https://…" /><Button type="button" variant="ghost" size="icon" onClick={() => importantLinks.remove(index)} aria-label="Remove important link"><Trash2 className="size-4" /></Button></div>{errors.memoryCapsule?.importantLinks?.[index]?.url?.message && <p className="mt-1 text-xs text-rose-300">{errors.memoryCapsule.importantLinks[index]?.url?.message}</p>}</div>)}</div></section>
-              </>}
+              {step === 3 && (
+                <>
+                  <SectionIntro
+                    eyebrow="Step 3 of 3"
+                    title="Leave yourself an intentional handoff"
+                    description="Name the reason momentum faded, then preserve the specific clues that will make returning seamless."
+                  />
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <Field label="Why did work stop?" required error={errors.abandonmentReason?.message}>
+                      <Select {...register("abandonmentReason")}>
+                        {abandonmentReasons.map((reason) => (
+                          <option key={reason} value={reason}>
+                            {abandonmentReasonLabels[reason]}
+                          </option>
+                        ))}
+                      </Select>
+                    </Field>
+                    <Field label="Context notes" error={errors.abandonmentNotes?.message}>
+                      <Textarea
+                        {...register("abandonmentNotes")}
+                        rows={2}
+                        placeholder="What shifted? Time, interest, technical roadblock, or changed priorities?"
+                      />
+                    </Field>
+                  </div>
+
+                  <div className="my-8 flex items-center gap-3">
+                    <span className="h-px flex-1 bg-[#E6E4DD]" />
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#606E54]">
+                      Memory Capsule Details
+                    </span>
+                    <span className="h-px flex-1 bg-[#E6E4DD]" />
+                  </div>
+
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <Field label="Last thing that worked" error={errors.memoryCapsule?.lastThingThatWorked?.message}>
+                      <Textarea
+                        {...register("memoryCapsule.lastThingThatWorked")}
+                        rows={2}
+                        placeholder="The last commit, component, or screen that was working properly…"
+                      />
+                    </Field>
+                    <Field label="Exact stopping point" error={errors.memoryCapsule?.exactStoppingPoint?.message}>
+                      <Textarea
+                        {...register("memoryCapsule.exactStoppingPoint")}
+                        rows={2}
+                        placeholder="The specific blocker, design question, or bug where work stopped…"
+                      />
+                    </Field>
+                    <Field label="Suggested restart action" error={errors.memoryCapsule?.suggestedNextStep?.message}>
+                      <Textarea
+                        {...register("memoryCapsule.suggestedNextStep")}
+                        rows={2}
+                        placeholder="One modest, high-leverage 15-minute action to pick up momentum…"
+                      />
+                    </Field>
+                    <Field label="Note to future self" error={errors.memoryCapsule?.noteToFutureSelf?.message}>
+                      <Textarea
+                        {...register("memoryCapsule.noteToFutureSelf")}
+                        rows={2}
+                        placeholder="What tone of mind or intuition would you want to recall?"
+                      />
+                    </Field>
+                  </div>
+
+                  <section className="mt-7">
+                    <div className="mb-3 flex items-center justify-between">
+                      <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#5C605A]">
+                        <Link2 className="size-4 text-[#606E54]" /> Reference Links
+                      </p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => importantLinks.append({ id: createStableId("link"), url: "" })}
+                      >
+                        <Plus className="size-3.5" /> Add reference
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {importantLinks.fields.map((field, index) => (
+                        <div key={field.fieldKey}>
+                          <div className="flex gap-2">
+                            <Input
+                              {...register(`memoryCapsule.importantLinks.${index}.url`)}
+                              inputMode="url"
+                              aria-label="Important link"
+                              placeholder="https://…"
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => importantLinks.remove(index)}
+                              aria-label="Remove link"
+                            >
+                              <Trash2 className="size-4 text-[#858780]" />
+                            </Button>
+                          </div>
+                          {errors.memoryCapsule?.importantLinks?.[index]?.url?.message && (
+                            <p className="mt-1 text-xs text-[#9E2A2B]">
+                              {errors.memoryCapsule.importantLinks[index]?.url?.message}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                </>
+              )}
             </motion.div>
           </AnimatePresence>
         </CardContent>
-        <div className="flex flex-col gap-3 border-t border-white/[0.07] bg-black/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7 lg:px-9">
-          <div className="min-h-5 text-xs text-slate-600">{mode === "create" && draftMessage}</div>
-          <div className="flex flex-wrap justify-end gap-2">
-            <Button asChild variant="ghost"><Link to={cancelTo}>Cancel</Link></Button>
-            {step > 1 && <Button type="button" variant="secondary" onClick={() => setStep((current) => current - 1)}><ArrowLeft className="size-4" /> Back</Button>}
-            {step < 3 ? <Button type="button" onClick={nextStep}>Continue <ArrowRight className="size-4" /></Button> : <Button type="submit" disabled={isSubmitting}><Save className="size-4" /> {mode === "create" ? "Preserve project" : "Save changes"}</Button>}
+
+        <div className="flex flex-col gap-3 border-t border-[#E6E4DD] bg-[#FAF9F6] px-6 py-4.5 sm:flex-row sm:items-center sm:justify-between sm:px-9">
+          <div className="min-h-5 text-xs text-[#858780]">{mode === "create" && draftMessage}</div>
+          <div className="flex flex-wrap justify-end gap-2.5">
+            <Button asChild variant="ghost">
+              <Link to={cancelTo}>Cancel</Link>
+            </Button>
+            {step > 1 && (
+              <Button type="button" variant="secondary" onClick={() => setStep((current) => current - 1)}>
+                <ArrowLeft className="size-4" /> Back
+              </Button>
+            )}
+            {step < 3 ? (
+              <Button type="button" onClick={nextStep}>
+                Continue <ArrowRight className="size-4" />
+              </Button>
+            ) : (
+              <Button type="submit" disabled={isSubmitting}>
+                <Save className="size-4" /> {mode === "create" ? "Preserve project" : "Save changes"}
+              </Button>
+            )}
           </div>
         </div>
       </Card>

@@ -22,17 +22,21 @@ export function ArchiveGrid({ projects, emptyTitle, emptyDescription, showStatus
   return (
     <>
       <ArchiveToolbar filters={filters} onChange={setFilters} showStatus={showStatusFilter} />
-      <div className="mt-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-slate-500"><strong className="font-semibold text-slate-300">{visibleProjects.length}</strong> {visibleProjects.length === 1 ? "project" : "projects"}</p>
-        <p className="hidden text-xs text-slate-600 sm:block">Stored locally in this browser</p>
+      <div className="mt-4 flex items-center justify-between gap-4 px-1">
+        <p className="text-xs text-[#858780]">
+          Showing <strong className="font-semibold text-[#252724]">{visibleProjects.length}</strong> {visibleProjects.length === 1 ? "project" : "projects"}
+        </p>
+        <p className="hidden text-xs text-[#858780] sm:block">All changes saved automatically</p>
       </div>
-      <section className="mt-4 grid gap-4 md:grid-cols-2 2xl:grid-cols-3" aria-label="Projects">
-        {visibleProjects.map((project) => <ProjectCard key={project.id} project={project} onToggleRevisit={toggleRevisitLater} />)}
+      <section className="mt-3 grid gap-5 md:grid-cols-2 2xl:grid-cols-3" aria-label="Projects">
+        {visibleProjects.map((project) => (
+          <ProjectCard key={project.id} project={project} onToggleRevisit={toggleRevisitLater} />
+        ))}
         {visibleProjects.length === 0 && (
           <ArchiveEmptyState
             filtered={hasFilters && projects.length > 0}
             title={hasFilters && projects.length > 0 ? "No projects match those filters" : emptyTitle}
-            description={hasFilters && projects.length > 0 ? "Try a broader search or reset the active filters." : emptyDescription}
+            description={hasFilters && projects.length > 0 ? "Try a broader search query or reset your filter selection." : emptyDescription}
             onReset={() => setFilters({ ...defaultArchiveFilters })}
           />
         )}

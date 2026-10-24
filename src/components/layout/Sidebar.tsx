@@ -1,4 +1,4 @@
-import { MoonStar } from "lucide-react";
+import { Bookmark, ShieldCheck } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { Badge } from "../ui/Badge";
@@ -9,10 +9,16 @@ import { navigationItems } from "./navigation";
 export function Sidebar() {
   const { projects } = useArchive();
   return (
-    <aside className="premium-sidebar fixed inset-y-0 left-0 z-30 hidden w-[18.5rem] flex-col border-r border-white/10 px-4 py-5 backdrop-blur-2xl lg:flex">
-      <div className="px-2 pb-8 pt-1"><Brand /></div>
-      <p className="px-3 pb-2 text-[0.62rem] font-black uppercase tracking-[0.25em] text-[#ffbb8d]">Collection / 01</p>
-      <nav className="space-y-1.5" aria-label="Primary navigation">
+    <aside className="premium-sidebar fixed inset-y-0 left-0 z-30 hidden w-[18.5rem] flex-col px-5 py-6 lg:flex">
+      <div className="pb-8 pt-1">
+        <Brand />
+      </div>
+
+      <p className="px-3 pb-2.5 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#858780]">
+        Archive Collections
+      </p>
+
+      <nav className="space-y-1" aria-label="Primary navigation">
         {navigationItems.map((item) => {
           const Icon = item.icon;
           return (
@@ -22,19 +28,31 @@ export function Sidebar() {
               end={item.to === "/"}
               className={({ isActive }) =>
                 cn(
-                  "group flex items-center gap-3 rounded-2xl px-3 py-3 text-slate-400 transition-all duration-300 hover:translate-x-1 hover:bg-white/[0.055] hover:text-white",
-                  isActive && "nav-active text-[#17130c]",
+                  "group flex items-center gap-3.5 rounded-xl px-3.5 py-2.5 text-[#5C605A] transition-all duration-200 hover:bg-[#F3F2EE] hover:text-[#252724]",
+                  isActive && "nav-active font-medium",
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  <span className={cn("grid size-9 place-items-center rounded-xl bg-white/[0.06] transition-transform duration-300 group-hover:rotate-3", isActive && "bg-black/10 text-[#17130c]")}>
-                    <Icon className="size-[1.05rem]" aria-hidden="true" />
+                  <span
+                    className={cn(
+                      "grid size-8 place-items-center rounded-lg bg-[#EFECE5] text-[#5C605A] transition-colors group-hover:bg-[#E4E0D7] group-hover:text-[#252724]",
+                      isActive && "bg-[#606E54] text-white group-hover:bg-[#606E54] group-hover:text-white",
+                    )}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold">{item.label}</span>
-                    <span className={cn("block truncate text-[0.72rem] text-slate-600 group-hover:text-slate-400", isActive && "text-black/55 group-hover:text-black/55")}>{item.description}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold tracking-[-0.01em]">{item.label}</span>
+                    <span
+                      className={cn(
+                        "block truncate text-[0.73rem] text-[#858780]",
+                        isActive && "text-[#5C605A]",
+                      )}
+                    >
+                      {item.description}
+                    </span>
                   </span>
                 </>
               )}
@@ -42,13 +60,18 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <div className="sidebar-vault mt-auto rounded-[1.4rem] border border-white/10 p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <span className="grid size-9 place-items-center rounded-xl bg-[#d8ff54] text-[#17130c] shadow-[0_8px_25px_rgba(216,255,84,.2)]"><MoonStar className="size-4" /></span>
+
+      <div className="sidebar-vault mt-auto rounded-xl p-4">
+        <div className="mb-2.5 flex items-center justify-between">
+          <span className="grid size-8 place-items-center rounded-lg bg-[#EBF0E6] text-[#606E54]">
+            <ShieldCheck className="size-4.5" />
+          </span>
           <Badge variant="emerald">Local vault</Badge>
         </div>
-        <p className="text-sm font-semibold text-slate-200">Your ideas stay close.</p>
-        <p className="mt-1 text-xs leading-5 text-slate-500">{projects.length} {projects.length === 1 ? "project" : "projects"} stored in this browser.</p>
+        <p className="text-xs font-semibold text-[#252724]">Private & On-Device</p>
+        <p className="mt-1 text-[0.76rem] leading-relaxed text-[#686B66]">
+          {projects.length} {projects.length === 1 ? "idea" : "ideas"} preserved safely in this browser.
+        </p>
       </div>
     </aside>
   );

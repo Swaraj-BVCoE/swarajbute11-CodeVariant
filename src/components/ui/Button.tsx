@@ -4,20 +4,24 @@ import type { ButtonHTMLAttributes } from "react";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd21c] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-canvas)] disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-180 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#606E54] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-40 cursor-pointer",
   {
     variants: {
       variant: {
-        primary: "border border-[#ffdd55]/50 bg-gradient-to-br from-[#ffe34f] via-[#ffc51c] to-[#ff8a2b] text-[#1b1307] shadow-[0_10px_30px_rgba(255,152,25,.22),inset_0_1px_rgba(255,255,255,.75),inset_0_-3px_rgba(143,62,0,.16)] hover:-translate-y-0.5 hover:brightness-110",
-        secondary: "border border-white/12 bg-white/[0.07] text-slate-100 shadow-[inset_0_1px_rgba(255,255,255,.08),0_10px_25px_rgba(0,0,0,.14)] hover:-translate-y-0.5 hover:border-[#ff9b5f]/25 hover:bg-white/[0.11]",
-        ghost: "text-slate-300 hover:bg-white/[0.07] hover:text-[#fffaf0]",
-        success: "border border-[#d8ff54]/55 bg-gradient-to-br from-[#efffae] to-[#b6eb36] text-[#172000] shadow-[0_10px_28px_rgba(189,236,55,.17),inset_0_1px_rgba(255,255,255,.7)] hover:-translate-y-0.5 hover:brightness-110",
+        primary:
+          "bg-[#252724] text-[#FAF9F6] shadow-sm hover:bg-[#3D403C] active:translate-y-px",
+        secondary:
+          "border border-[#D8D6CE] bg-[#FFFFFF] text-[#252724] shadow-xs hover:bg-[#F7F7F4] hover:border-[#BCB9AF] active:translate-y-px",
+        ghost:
+          "text-[#5C605A] hover:bg-[#F3F2EE] hover:text-[#252724]",
+        success:
+          "border border-[#A8B59A] bg-[#606E54] text-[#FFFFFF] shadow-sm hover:bg-[#4E5B43] active:translate-y-px",
       },
       size: {
-        sm: "h-9 px-3",
-        md: "h-11 px-4",
-        lg: "h-12 px-5 text-[0.95rem]",
-        icon: "size-10",
+        sm: "h-8.5 px-3 text-xs",
+        md: "h-10 px-4 text-sm",
+        lg: "h-11 px-5 text-sm font-semibold",
+        icon: "size-9",
       },
     },
     defaultVariants: { variant: "primary", size: "md" },

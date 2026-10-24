@@ -5,7 +5,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "premium-card rounded-[var(--radius-card)] border border-white/[0.1]",
+        "premium-card rounded-xl",
         className,
       )}
       {...props}
@@ -14,9 +14,9 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 }
 
 export function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-5 pb-0 sm:p-6 sm:pb-0", className)} {...props} />;
+  return <div className={cn("p-6 pb-0 sm:p-7 sm:pb-0", className)} {...props} />;
 }
 
 export function CardContent({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("p-5 sm:p-6", className)} {...props} />;
+  return <div className={cn("p-6 sm:p-7", className)} {...props} />;
 }

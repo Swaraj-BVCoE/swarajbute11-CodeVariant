@@ -3,14 +3,21 @@ import { Link } from "react-router-dom";
 export function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <Link to="/" className="group flex min-w-0 items-center gap-3" aria-label="The Project Graveyard home">
-      <span className="brand-mark relative grid size-12 shrink-0 place-items-center">
-        <img src="/brand/project-graveyard-mark.png" alt="" className="size-12 object-contain transition duration-500 group-hover:-translate-y-1 group-hover:rotate-3 group-hover:scale-110" />
-        <span className="absolute -bottom-1 left-1/2 h-2 w-8 -translate-x-1/2 rounded-full bg-orange-500/35 blur-md" />
+      <span className="relative grid size-10 shrink-0 place-items-center rounded-xl bg-[#FAF9F6] border border-[#E6E4DD] p-1 shadow-sm transition-transform duration-300 group-hover:scale-105">
+        <img
+          src="/brand/project-graveyard-mark.png"
+          alt=""
+          className="size-8 object-contain"
+        />
       </span>
       {!compact && (
         <span className="min-w-0">
-          <span className="block truncate font-display text-[1.02rem] font-bold tracking-[-0.02em] text-[#fffaf0]">The Project Graveyard</span>
-          <span className="block truncate text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#d8ff54]">Ideas never expire</span>
+          <span className="block truncate font-display text-[1.12rem] font-semibold tracking-[-0.02em] text-[#252724]">
+            The Project Graveyard
+          </span>
+          <span className="block truncate text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-[#606E54]">
+            An Archive for Ideas
+          </span>
         </span>
       )}
     </Link>

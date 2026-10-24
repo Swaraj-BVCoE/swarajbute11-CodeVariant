@@ -13,5 +13,10 @@ const statusConfig = {
 export function StatusBadge({ status }: { status: ProjectStatus }) {
   const config = statusConfig[status];
   const Icon = config.icon;
-  return <Badge variant={config.variant}><Icon className="size-3" /> {statusLabels[status]}</Badge>;
+  return (
+    <Badge variant={config.variant}>
+      <Icon className="size-3" />
+      <span>{statusLabels[status]}</span>
+    </Badge>
+  );
 }

@@ -1,4 +1,4 @@
-import { Clock3, FolderOpen, HeartPulse, Plus, RotateCcw } from "lucide-react";
+import { Clock3, FolderOpen, HeartPulse, Plus, RotateCcw, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArchiveGrid } from "../features/archive/ArchiveGrid";
@@ -12,10 +12,29 @@ import { PageHeader } from "../components/layout/PageHeader";
 export function AllProjectsPage() {
   const { projects, resetDemoData } = useArchive();
   const [resetOpen, setResetOpen] = useState(false);
+
   const stats = [
-    { label: "Sleeping ideas", value: projects.filter((project) => project.status !== "archived").length, note: `${projects.length} total in archive`, icon: FolderOpen, color: "text-[#351505] bg-gradient-to-br from-[#ffb47f] to-[#ff6422]" },
-    { label: "Ready to revisit", value: projects.filter((project) => project.revisitLater).length, note: "Saved for reflection", icon: Clock3, color: "text-[#2b2100] bg-gradient-to-br from-[#fff098] to-[#ffd21c]" },
-    { label: "Revived", value: projects.filter((project) => project.status === "reviving").length, note: "Back in motion", icon: HeartPulse, color: "text-[#192300] bg-gradient-to-br from-[#efffa3] to-[#b8ee36]" },
+    {
+      label: "Sleeping ideas",
+      value: projects.filter((project) => project.status !== "archived").length,
+      note: `${projects.length} total preserved`,
+      icon: FolderOpen,
+      iconBg: "bg-[#F3F2EE] text-[#606E54]",
+    },
+    {
+      label: "Ready to revisit",
+      value: projects.filter((project) => project.revisitLater).length,
+      note: "Saved for reflection",
+      icon: Clock3,
+      iconBg: "bg-[#F8F4EC] text-[#9E7D4E]",
+    },
+    {
+      label: "Revived",
+      value: projects.filter((project) => project.status === "reviving").length,
+      note: "Back in active motion",
+      icon: HeartPulse,
+      iconBg: "bg-[#EBF0E6] text-[#4A5740]",
+    },
   ];
 
   return (
@@ -23,30 +42,74 @@ export function AllProjectsPage() {
       <PageHeader
         eyebrow="Your idea archive"
         title="Nothing good is ever truly buried."
-        description="Every unfinished project still holds a useful story. Search the archive, notice what changed, and return when the timing feels right."
-        action={<div className="flex flex-wrap gap-2"><Button type="button" variant="secondary" size="lg" onClick={() => setResetOpen(true)}><RotateCcw className="size-4" /> Reset demo</Button><Button asChild size="lg"><Link to="/projects/new"><Plus className="size-4" /> Preserve a project</Link></Button></div>}
+        description="Every unfinished project still holds a valuable spark. Preserve context, notice what shifted, and return whenever the timing feels right."
+        action={
+          <div className="flex flex-wrap items-center gap-2.5">
+            <Button
+              type="button"
+              variant="secondary"
+              size="lg"
+              onClick={() => setResetOpen(true)}
+            >
+              <RotateCcw className="size-4" /> Reset demo
+            </Button>
+            <Button asChild size="lg">
+              <Link to="/projects/new">
+                <Plus className="size-4" /> Preserve a project
+              </Link>
+            </Button>
+          </div>
+        }
       />
+
       <PageContainer>
-        <aside className="mb-5 flex items-start gap-3 rounded-2xl border border-[#d8ff54]/15 bg-[#d8ff54]/[0.045] px-4 py-3 text-sm text-slate-400 shadow-[inset_0_1px_rgba(255,255,255,.04)]">
-          <span className="mt-1 size-2 shrink-0 rounded-full bg-[#d8ff54] shadow-[0_0_14px_rgba(216,255,84,.65)]" />
-          <p><strong className="font-semibold text-slate-200">Guest archive:</strong> projects and changes stay only in this browser. No account or cloud sync is active.</p>
+        <aside className="mb-6 flex items-start gap-3 rounded-xl border border-[#D4DDD0] bg-[#F7F9F5] px-4 py-3 text-sm text-[#5C605A]">
+          <span className="mt-1 size-2 shrink-0 rounded-full bg-[#606E54]" />
+          <p className="leading-relaxed">
+            <strong className="font-semibold text-[#252724]">Local & Private:</strong> This archive lives entirely in your browser. No external tracking, cloud sync, or account required.
+          </p>
         </aside>
-        <section className="grid gap-3 sm:grid-cols-3" aria-label="Archive overview">
+
+        <section className="grid gap-4 sm:grid-cols-3" aria-label="Archive overview">
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
-              <Card key={stat.label} className="stat-card group">
-                <CardContent className="flex items-center gap-4 p-4 sm:p-5">
-                  <span className={`stat-icon grid size-12 shrink-0 place-items-center rounded-2xl ${stat.color}`}><Icon className="size-5" /></span>
-                  <div className="min-w-0"><div className="flex items-baseline gap-2"><strong className="font-display text-2xl text-white">{stat.value}</strong><span className="truncate text-sm font-semibold text-slate-300">{stat.label}</span></div><p className="text-xs text-slate-600">{stat.note}</p></div>
+              <Card key={stat.label} className="stat-card">
+                <CardContent className="flex items-center gap-4 p-5">
+                  <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${stat.iconBg}`}>
+                    <Icon className="size-5" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="flex items-baseline gap-2">
+                      <strong className="font-display text-2xl font-semibold text-[#252724]">
+                        {stat.value}
+                      </strong>
+                      <span className="truncate text-sm font-semibold text-[#5C605A]">
+                        {stat.label}
+                      </span>
+                    </div>
+                    <p className="text-xs text-[#858780]">{stat.note}</p>
+                  </div>
                 </CardContent>
               </Card>
             );
           })}
         </section>
-        <div className="mt-6"><ArchiveGrid projects={projects} emptyTitle="Your archive is empty" emptyDescription="Preserve an unfinished project to keep its story within reach." /></div>
+
+        <div className="mt-7">
+          <ArchiveGrid
+            projects={projects}
+            emptyTitle="Your archive is empty"
+            emptyDescription="Preserve an unfinished project to keep its story within reach."
+          />
+        </div>
       </PageContainer>
-      <ResetDemoDataDialog open={resetOpen} onClose={() => setResetOpen(false)} onConfirm={resetDemoData} />
+
+      <ResetDemoDataDialog
+        open={resetOpen}
+        onClose={() => setResetOpen(false)}
+        onConfirm={resetDemoData}
+      />
     </>
   );
 }
