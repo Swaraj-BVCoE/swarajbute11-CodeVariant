@@ -18,7 +18,13 @@ export function HeroScene3D() {
     );
     camera.position.set(0, 0, 7.5);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    } catch {
+      container.dataset.webglFallback = "true";
+      return;
+    }
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
@@ -304,7 +310,7 @@ export function HeroScene3D() {
   return (
     <div
       ref={mountRef}
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden"
+      className="three-scene-fallback pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden"
       style={{ perspective: "1000px" }}
       aria-hidden="true"
     />

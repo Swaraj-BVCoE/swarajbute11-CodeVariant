@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Circle, Link2, Plus, Save, Trash2, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Circle, FileText, Link2, Plus, Trash2, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm, useWatch, type FieldErrors, type FieldPath } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -16,6 +16,11 @@ import { clearProjectDraft, loadProjectDraft, saveProjectDraft, type ProjectDraf
 import { createStableId } from "./projectMapping";
 import { projectFormSchema, type ProjectFormValues } from "./projectFormSchema";
 import { useDirtyNavigationGuard } from "./useDirtyNavigationGuard";
+import { ActionZone } from "../canvas-protocol/ActionZone";
+import { CanvasBoard } from "../canvas-protocol/CanvasBoard";
+import { CanvasGuide } from "../canvas-protocol/CanvasGuide";
+import { DraggableCanvasCard } from "../canvas-protocol/DraggableCanvasCard";
+import type { CanvasCardData, CanvasZoneData } from "../canvas-protocol/canvasProtocol";
 
 type ProjectFormProps = {
   mode: "create" | "edit";
@@ -133,10 +138,11 @@ export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: 
     if (valid) setStep((current) => Math.min(3, current + 1));
   };
 
-  const handleValidSubmit = (values: ProjectFormValues) => {
-    if (!onSubmitProject(values)) return;
+  const persistValidForm = (values: ProjectFormValues) => {
+    if (!onSubmitProject(values)) return false;
     setSaved(true);
     if (mode === "create") clearProjectDraft();
+    return true;
   };
 
   const handleInvalidSubmit = (formErrors: FieldErrors<ProjectFormValues>) => {
@@ -145,12 +151,22 @@ export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: 
     else setStep(3);
   };
 
+  const handleCanvasDrop = async (_card: CanvasCardData, zone: CanvasZoneData) => {
+    if (mode !== "create" || zone.zoneType !== "save-to-archive" || isSubmitting) return false;
+    let persisted = false;
+    await handleSubmit(
+      (values) => { persisted = persistValidForm(values); },
+      (formErrors) => { handleInvalidSubmit(formErrors); },
+    )();
+    return persisted;
+  };
+
   const today = new Date().toISOString().slice(0, 10);
   const completedCount = workItems.fields.filter((item) => item.completed).length;
   const unfinishedCount = workItems.fields.length - completedCount;
 
   return (
-    <form onSubmit={handleSubmit(handleValidSubmit, handleInvalidSubmit)} noValidate>
+    <form onSubmit={(event) => event.preventDefault()} noValidate>
       {(pendingDraft || draftIssue) && (
         <div className="mb-6 flex flex-col gap-4 rounded-xl border border-[#E4D8BE] bg-[#F8F4EC] p-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -523,13 +539,46 @@ export function ProjectForm({ mode, initialValues, cancelTo, onSubmitProject }: 
               <Button type="button" onClick={nextStep}>
                 Continue <ArrowRight className="size-4" />
               </Button>
-            ) : (
-              <Button type="submit" disabled={isSubmitting}>
-                <Save className="size-4" /> {mode === "create" ? "Preserve project" : "Save changes"}
+            ) : mode === "edit" ? (
+              <Button type="button" disabled={isSubmitting} onClick={() => void handleSubmit(persistValidForm, handleInvalidSubmit)()}>
+                Save changes
               </Button>
-            )}
+            ) : null}
           </div>
         </div>
+
+        {step === 3 && mode === "create" && (
+          <CanvasBoard onDrop={handleCanvasDrop}>
+            <div className="canvas-submit-panel">
+              <CanvasGuide />
+              <div className="canvas-submit-grid">
+                <DraggableCanvasCard
+                  data={{ kind: "canvas-card", cardType: "project-draft", cardId: "project-draft:create", label: observedValues.name?.trim() || "Untitled Project Draft" }}
+                  className="canvas-draft-card"
+                  handleLabel="Drag the project draft to Save to Archive"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="canvas-draft-icon"><FileText className="size-5" /></span>
+                    <div className="min-w-0">
+                      <p className="canvas-kicker">Project draft</p>
+                      <h3>{observedValues.name?.trim() || "Untitled project"}</h3>
+                      <p>{observedValues.shortDescription?.trim() || "Complete the form, then move this card into the archive zone."}</p>
+                      <div className="canvas-draft-meta">
+                        <span>{technologies.length} tools</span>
+                        <span>{workItems.fields.length} work items</span>
+                        <span>{statusLabels[observedValues.status ?? "paused"]}</span>
+                      </div>
+                    </div>
+                  </div>
+                </DraggableCanvasCard>
+                <ActionZone
+                  data={{ kind: "action-zone", zoneType: "save-to-archive", label: "Save to Archive" }}
+                  instruction="Drop the completed Project Draft here to validate and preserve it."
+                />
+              </div>
+            </div>
+          </CanvasBoard>
+        )}
       </Card>
     </form>
   );

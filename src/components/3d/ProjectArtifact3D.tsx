@@ -12,7 +12,13 @@ export function ProjectArtifact3D({ seed }: { seed: string }) {
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
     camera.position.z = 4.2;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch {
+      container.dataset.webglFallback = "true";
+      return;
+    }
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
@@ -120,7 +126,7 @@ export function ProjectArtifact3D({ seed }: { seed: string }) {
   return (
     <div
       ref={mountRef}
-      className="relative flex items-center justify-center size-full overflow-hidden"
+      className="three-scene-fallback relative flex items-center justify-center size-full overflow-hidden"
       aria-hidden="true"
     />
   );

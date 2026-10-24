@@ -156,3 +156,38 @@ Checkpoint 4 will add Blocker Recheck, Shrink the Dream, repeatable revival deci
 ### Preview note
 
 - Vite runs at \`http://localhost:5173/\`. The original preview failure was a stopped development process followed by memory exhaustion from multiple simultaneous WebGL renderers. The render load has been reduced and the server relaunched. Automated in-app browser inspection remains unavailable because the browser-control transport closed and the environment blocked a separate localhost probe.
+
+## Canvas Checkpoint 1 — Foundation and representative journey
+
+**Status:** Completed on 24 October 2026.
+
+### Completed work
+
+- Audited every current primary mutation trigger in `CANVAS_ACTION_MAP.md`, including form, dialog, terminal, desktop, and mobile surfaces.
+- Added `@dnd-kit/core` and a reusable typed Canvas Protocol layer with explicit card/zone compatibility rules.
+- Added pointer activation distance, delayed touch activation, keyboard pickup/movement/drop, Escape cancellation, drag overlays, screen-reader instructions, and announcements.
+- Added reusable draggable cards, contextual Action Zones, first-use guidance, and idle, ready, valid, invalid, pending, success, and error presentation states.
+- Replaced the create form's final execution button with a live Project Draft card that must be dropped into Save to Archive.
+- Kept create validation and draft recovery intact; invalid drops save nothing, surface field errors, and preserve form input.
+- Removed the bookmark execution button from project cards. Project records now move into Revisit Later, or back through Return to Collection, only by a valid completed drop.
+- Reused the existing `createProject` and `toggleRevisitLater` repository boundaries and revalidated current project state at drop time.
+- Refreshed the palette toward warm parchment, mineral teal, and terracotta, with a more editorial Palatino-style display face and Aptos/system body typography.
+
+### Remaining Canvas Checkpoint 2 conversions
+
+- Edit and Memory Capsule persistence, two-stage deletion, demo reset (including the terminal bypass), Blocker Recheck, Shrink the Dream, revival decisions, archive behaviour, and a final primary-action audit.
+- The application is therefore not yet fully Canvas Protocol compliant.
+
+### Checks completed
+
+- `pnpm typecheck` — passed.
+- `pnpm lint` — passed with no warnings.
+- `pnpm test` — 18 tests passed across four suites.
+- `pnpm build` — passed; the existing non-blocking bundle-size advisory remains.
+- Mobile browser QA — create steps, Project Draft, Save to Archive zone, archive cards, Revisit Later zone, labels, and responsive scrolling rendered correctly.
+- WebGL fallback QA — optional 3D scenes no longer blank the application when renderer creation fails.
+
+### Verification limitations
+
+- Browser automation confirmed the accessible drag controls and zones, but the available browser driver did not expose a reliable touch-drag gesture. Touch behavior is implemented through dnd-kit's delayed Touch Sensor and still needs physical-device confirmation.
+- Canvas Checkpoint 2 actions remain intentionally unconverted until explicit approval.

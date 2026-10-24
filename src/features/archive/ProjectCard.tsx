@@ -1,10 +1,11 @@
-import { ArrowUpRight, Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3 } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Circle, Clock3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { abandonmentReasonLabels, type Project } from "../../domain/project";
 import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { StatusBadge } from "./StatusBadge";
 import { Tilt3DCard } from "../../components/3d/Tilt3DCard";
+import { DraggableCanvasCard } from "../canvas-protocol/DraggableCanvasCard";
 
 function formatUpdatedDate(value: string) {
   const date = new Date(value);
@@ -21,13 +22,7 @@ const projectColorThemes = [
   { glow: "violet" as const, grad: "from-violet-500/9 via-blue-500/7 to-transparent", border: "hover:border-violet-300", artifact: "project-gem-violet" },
 ];
 
-export function ProjectCard({
-  project,
-  onToggleRevisit,
-}: {
-  project: Project;
-  onToggleRevisit: (id: string, nextValue: boolean) => void;
-}) {
+export function ProjectCard({ project }: { project: Project }) {
   const completed = project.workItems.filter((item) => item.completed).length;
   const remaining = project.workItems.length - completed;
 
@@ -36,28 +31,22 @@ export function ProjectCard({
   const theme = projectColorThemes[Math.abs(hash) % projectColorThemes.length];
 
   return (
-    <Tilt3DCard glowColor={theme.glow} className="h-full">
-      <div className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/70 bg-white/85 shadow-lg shadow-slate-200/50 backdrop-blur-md transition-all duration-300 ${theme.border} hover:shadow-2xl`}>
+    <DraggableCanvasCard
+      data={{ kind: "canvas-card", cardType: "project-record", cardId: `project:${project.id}`, projectId: project.id, label: project.name }}
+      className="h-full"
+      handleLabel={`Drag ${project.name} to an action zone`}
+    >
+      <Tilt3DCard glowColor={theme.glow} className="h-full">
+        <div className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/70 bg-white/85 shadow-lg shadow-slate-200/50 backdrop-blur-md transition-all duration-300 ${theme.border} hover:shadow-2xl`}>
         {/* Multi-color ambient background accent */}
         <div className={`pointer-events-none absolute -right-12 -top-12 size-40 rounded-full bg-gradient-to-br ${theme.grad} blur-2xl opacity-60 transition-opacity duration-300 group-hover:opacity-100`} />
 
         <div className="flex flex-1 flex-col p-6 sm:p-7">
           <div className="flex items-start justify-between gap-3">
             <StatusBadge status={project.status} />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="-mr-2 -mt-2 size-8 text-[#858780] hover:text-[#252724]"
-              aria-label={project.revisitLater ? `Remove ${project.name} from Revisit Later` : `Save ${project.name} to Revisit Later`}
-              aria-pressed={project.revisitLater}
-              onClick={() => onToggleRevisit(project.id, !project.revisitLater)}
-            >
-              {project.revisitLater ? (
-                <BookmarkCheck className="size-4 text-amber-500" />
-              ) : (
-                <Bookmark className="size-4" />
-              )}
-            </Button>
+            <span className="rounded-full border border-[#E5DDD0] bg-[#FFF9F0] px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[#A14F2B]">
+              Canvas ready
+            </span>
           </div>
 
           <div className="mt-4 flex items-start gap-4">
@@ -141,7 +130,8 @@ export function ProjectCard({
             <span>Updated {formatUpdatedDate(project.updatedAt)}</span>
           </p>
         </div>
-      </div>
-    </Tilt3DCard>
+        </div>
+      </Tilt3DCard>
+    </DraggableCanvasCard>
   );
 }

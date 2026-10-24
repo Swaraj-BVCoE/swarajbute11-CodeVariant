@@ -4,7 +4,7 @@
   color-scheme: light;
 
   /* Surfaces & Canvas */
-  --color-canvas: #FAF9F6;
+  --color-canvas: #FBF7F0;
   --color-surface: #FFFFFF;
   --color-surface-subtle: #F4F3EE;
   --color-surface-muted: #EBEAE4;
@@ -12,20 +12,20 @@
   --color-border-subtle: #EDECE6;
 
   /* Typography */
-  --color-charcoal: #252724;
-  --color-text-secondary: #5C605A;
+  --color-charcoal: #1E2927;
+  --color-text-secondary: #55605D;
   --color-text-muted: #858780;
 
   /* Premium Accents */
-  --color-olive: #606E54;
-  --color-olive-dark: #434D3A;
-  --color-sage: #96A387;
-  --color-sage-light: #EBF0E6;
-  --color-sage-subtle: #F3F6F0;
-  --color-champagne: #D8C8A8;
-  --color-bronze: #9E7D4E;
-  --color-bronze-dark: #785A30;
-  --color-terracotta: #A45839;
+  --color-olive: #176B63;
+  --color-olive-dark: #10524C;
+  --color-sage: #77A59C;
+  --color-sage-light: #E3F1ED;
+  --color-sage-subtle: #F0F7F4;
+  --color-champagne: #E3C9A6;
+  --color-bronze: #B36A3E;
+  --color-bronze-dark: #874626;
+  --color-terracotta: #D55A3D;
 
   /* Elevations */
   --shadow-subtle: 0 1px 2px rgba(37, 39, 36, 0.04);
@@ -36,7 +36,7 @@
   --radius-card: 1rem;
   --radius-button: 0.625rem;
 
-  font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: "Aptos", "Segoe UI Variable Text", "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -90,13 +90,124 @@ button, a {
 
 /* Editorial typography utilities */
 .font-display {
-  font-family: "Newsreader", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  letter-spacing: -0.02em;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  letter-spacing: -0.025em;
 }
 
 .font-sans {
-  font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Aptos", "Segoe UI Variable Text", "Segoe UI", sans-serif;
 }
+
+/* Canvas Protocol: cards execute actions only after a valid completed drop. */
+.canvas-guide {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
+  border: 1px solid #c8ded8;
+  border-radius: 0.9rem;
+  background: linear-gradient(120deg, rgba(235, 248, 244, 0.96), rgba(255, 248, 237, 0.96));
+  padding: 0.8rem 0.9rem;
+  color: #40514d;
+  box-shadow: 0 8px 24px -18px rgba(23, 107, 99, 0.5);
+}
+
+.canvas-guide-icon,
+.canvas-draft-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.7rem;
+  background: #176b63;
+  color: white;
+}
+
+.canvas-guide strong { display: block; color: #1e2927; font-size: 0.78rem; letter-spacing: 0.01em; }
+.canvas-guide p { margin: 0.15rem 0 0; font-size: 0.72rem; line-height: 1.45; }
+.canvas-guide button { margin-left: auto; display: grid; place-items: center; width: 2rem; height: 2rem; border: 0; border-radius: 0.6rem; background: transparent; color: #66736f; cursor: pointer; }
+.canvas-guide button:hover { background: rgba(255, 255, 255, 0.8); color: #1e2927; }
+
+.canvas-card { position: relative; min-width: 0; touch-action: pan-y; }
+.canvas-card-dragging { opacity: 0.28; }
+.canvas-drag-handle {
+  position: absolute;
+  top: 0.7rem;
+  left: 50%;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transform: translateX(-50%);
+  border: 1px solid rgba(205, 191, 170, 0.9);
+  border-radius: 999px;
+  background: rgba(255, 252, 247, 0.96);
+  padding: 0.28rem 0.58rem;
+  color: #7d5037;
+  box-shadow: 0 6px 14px -8px rgba(44, 31, 24, 0.45);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: grab;
+  touch-action: none;
+}
+.canvas-drag-handle:active { cursor: grabbing; }
+.canvas-drag-handle:focus-visible { outline: 3px solid rgba(23, 107, 99, 0.28); outline-offset: 2px; }
+
+.canvas-action-zone {
+  display: flex;
+  min-height: 5.25rem;
+  align-items: center;
+  gap: 0.8rem;
+  border: 1.5px dashed #c9bca9;
+  border-radius: 1rem;
+  background: rgba(255, 251, 244, 0.86);
+  padding: 0.9rem 1rem;
+  color: #604c40;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.canvas-action-zone strong { display: block; color: #26312f; font-size: 0.85rem; }
+.canvas-action-zone small { display: block; margin-top: 0.18rem; font-size: 0.7rem; line-height: 1.4; }
+.canvas-zone-icon { display: grid; flex: 0 0 auto; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 0.8rem; background: #f0e5d6; color: #a14f2b; }
+.canvas-action-zone-ready { border-color: #7daaa2; background: #f2faf7; }
+.canvas-action-zone-valid { transform: translateY(-2px) scale(1.01); border-style: solid; border-color: #176b63; background: #e5f4ef; box-shadow: 0 12px 30px -18px rgba(23, 107, 99, 0.65); }
+.canvas-action-zone-valid .canvas-zone-icon,
+.canvas-action-zone-success .canvas-zone-icon { background: #176b63; color: white; }
+.canvas-action-zone-invalid { border-color: #d99883; background: #fff2ed; color: #8c3e2c; }
+.canvas-action-zone-pending { border-style: solid; border-color: #c27a3f; background: #fff7e8; }
+.canvas-action-zone-success { border-style: solid; border-color: #176b63; background: #e7f6f0; }
+.canvas-action-zone-error { border-style: solid; border-color: #b84c3c; background: #fff0ec; }
+
+.canvas-drag-overlay { display: inline-flex; max-width: 20rem; align-items: center; gap: 0.5rem; transform: rotate(2deg); border: 1px solid #d6c4ab; border-radius: 0.9rem; background: #fffaf2; padding: 0.75rem 1rem; color: #26312f; box-shadow: 0 22px 55px -20px rgba(35, 43, 41, 0.48); font-weight: 800; }
+.canvas-submit-panel { border-top: 1px solid #e5ded2; background: linear-gradient(145deg, #fffaf3, #f3faf7); padding: 1rem 1.5rem 1.5rem; }
+.canvas-submit-grid { display: grid; gap: 0.9rem; }
+.canvas-draft-card { border: 1px solid #d8ccb9; border-radius: 1rem; background: rgba(255, 255, 255, 0.94); padding: 3.15rem 1rem 1rem; box-shadow: 0 14px 35px -25px rgba(48, 39, 29, 0.65); }
+.canvas-draft-card h3 { margin: 0; color: #1e2927; font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif; font-size: 1.25rem; font-weight: 700; }
+.canvas-draft-card p:not(.canvas-kicker) { margin: 0.25rem 0 0; color: #5d6663; font-size: 0.76rem; line-height: 1.45; }
+.canvas-kicker { margin: 0 0 0.15rem; color: #a14f2b; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+.canvas-draft-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.7rem; }
+.canvas-draft-meta span { border-radius: 999px; background: #edf5f2; padding: 0.22rem 0.5rem; color: #30645d; font-size: 0.65rem; font-weight: 700; }
+
+@media (min-width: 640px) {
+  .canvas-submit-grid { grid-template-columns: minmax(0, 1.25fr) minmax(15rem, 0.75fr); align-items: stretch; }
+}
+
+.three-scene-fallback[data-webgl-fallback="true"]::before,
+.three-scene-fallback[data-webgl-fallback="true"]::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  content: "";
+  border: 1px solid rgba(45, 212, 191, 0.38);
+  border-radius: 32%;
+  background: linear-gradient(135deg, rgba(23, 107, 99, 0.82), rgba(213, 90, 61, 0.7));
+  box-shadow: 0 0 45px rgba(227, 201, 166, 0.34);
+  transform: translate(-50%, -50%) rotate(28deg);
+}
+.three-scene-fallback[data-webgl-fallback="true"]::before { width: 5.5rem; height: 5.5rem; }
+.three-scene-fallback[data-webgl-fallback="true"]::after { width: 7.5rem; height: 7.5rem; border-style: dashed; background: transparent; transform: translate(-50%, -50%) rotate(-18deg); }
 
 /* Custom refined scrollbar */
 ::-webkit-scrollbar {
