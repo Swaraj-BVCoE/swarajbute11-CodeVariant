@@ -2,6 +2,7 @@ import type { Project } from "../domain/project";
 import { cloneSeedProjects } from "./seedProjects";
 
 export const PROJECT_STORAGE_KEY = "project-graveyard:archive";
+export const PROJECT_DELETED_KEY = "project-graveyard:deleted";
 export const PROJECT_STORAGE_VERSION = 1;
 
 type StoredArchive = {
@@ -121,13 +122,81 @@ export class LocalStorageProjectRepository implements ProjectRepository {
     return saved.ok ? { ok: true, data: cloneProjects([project])[0] } : saved;
   }
 
+  // Soft‑delete: move the project to a separate "graveyard" store
   delete(id: string): RepositoryResult<void> {
     const listed = this.list();
     if (!listed.ok) return listed;
-    if (!listed.data.some((project) => project.id === id)) {
+    const project = listed.data.find((p) => p.id === id);
+    if (!project) {
       return { ok: false, error: { code: "not-found", message: "That project could not be found." } };
     }
-    return this.write(listed.data.filter((project) => project.id !== id));
+    // Remove from main archive
+    const removeResult = this.write(listed.data.filter((p) => p.id !== id));
+    if (!removeResult.ok) return removeResult;
+    // Add to graveyard
+    const graveyard = this.readDeleted();
+    const updatedGraveyard = graveyard.ok ? [project, ...graveyard.data] : [project];
+    return this.writeDeleted(updatedGraveyard);
+  }
+
+  /** Restore a previously soft‑deleted project */
+  restore(id: string): RepositoryResult<Project> {
+    const graveyard = this.readDeleted();
+    if (!graveyard.ok) return { ok: false, error: graveyard.error };
+    const project = graveyard.data.find((p) => p.id === id);
+    if (!project) {
+      return { ok: false, error: { code: "not-found", message: "That deleted project could not be found." } };
+    }
+    // Remove from graveyard
+    const newGraveyard = graveyard.data.filter((p) => p.id !== id);
+    const writeGraveyardResult = this.writeDeleted(newGraveyard);
+    if (!writeGraveyardResult.ok) return { ok: false, error: writeGraveyardResult.error };
+    // Add back to main archive
+    const archive = this.list();
+    if (!archive.ok) return { ok: false, error: archive.error };
+    const writeArchiveResult = this.write([project, ...archive.data]);
+    return writeArchiveResult.ok ? { ok: true, data: cloneProjects([project])[0] } : { ok: false, error: writeArchiveResult.error };
+  }
+
+  /** List projects that are in the graveyard (soft‑deleted) */
+  listDeleted(): RepositoryResult<Project[]> {
+    const raw = this.storage.getItem(PROJECT_DELETED_KEY);
+    if (raw === null) return { ok: true, data: [] };
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed)) {
+        return { ok: false, error: { code: "malformed-data", message: "Graveyard data is corrupted." } };
+      }
+      if (!parsed.every(isProject)) {
+        return { ok: false, error: { code: "malformed-data", message: "Graveyard contains invalid projects." } };
+      }
+      return { ok: true, data: cloneProjects(parsed) };
+    } catch {
+      return { ok: false, error: { code: "malformed-data", message: "Graveyard data could not be parsed." } };
+    }
+  }
+
+  private readDeleted(): RepositoryResult<Project[]> {
+    const raw = this.storage.getItem(PROJECT_DELETED_KEY);
+    if (raw === null) return { ok: true, data: [] };
+    try {
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed) || !parsed.every(isProject)) {
+        return { ok: false, error: { code: "malformed-data", message: "Graveyard data is invalid." } };
+      }
+      return { ok: true, data: cloneProjects(parsed) };
+    } catch {
+      return { ok: false, error: { code: "malformed-data", message: "Failed to read graveyard." } };
+    }
+  }
+
+  private writeDeleted(projects: Project[]): RepositoryResult<void> {
+    try {
+      this.storage.setItem(PROJECT_DELETED_KEY, JSON.stringify(projects));
+      return { ok: true, data: undefined };
+    } catch {
+      return { ok: false, error: { code: "storage-write-failed", message: "Could not write graveyard data." } };
+    }
   }
 
   setRevisitLater(id: string, revisitLater: boolean): RepositoryResult<Project> {
