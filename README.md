@@ -6,7 +6,7 @@ The Project Graveyard is a reflective archive for unfinished ideas. It helps peo
 
 ## Current status
 
-Checkpoint 2 provides the functioning guest archive: typed project records, versioned localStorage persistence, first-run examples, live counts, search, filters, sorting, revisit toggles, and derived revived/archived views. Create and edit forms intentionally begin in Checkpoint 3.
+Checkpoint 3 provides the complete local project-management journey: a validated three-step form, create-form draft recovery, dirty-navigation protection, project details, history-preserving edits, deletion confirmation, Memory Capsules, and timeline events.
 
 ## Run locally
 
@@ -48,7 +48,13 @@ No environment variables are needed for the guest archive. `.env.example` contai
 
 Guest projects are stored in this browser under a versioned localStorage record. Example projects are inserted only when the storage key has never existed. Removing all projects will therefore leave the archive empty after reload; examples return only through the confirmed **Reset demo** action.
 
+The Add Project form saves an independent browser-local draft after changes. Returning to the form offers explicit restore or discard actions, and a successful project creation clears the draft.
+
 If stored data is malformed or a browser write fails, the interface reports the error rather than claiming success. Resetting demo data is the recovery path for malformed records.
+
+## Project form
+
+The three steps capture the original idea, completed and unfinished work, present status, historical dates, abandonment context, and a Project Memory Capsule. URLs accept only complete `http://` or `https://` addresses, and historical project dates remain separate from system-created timeline timestamps.
 
 ## Structure
 

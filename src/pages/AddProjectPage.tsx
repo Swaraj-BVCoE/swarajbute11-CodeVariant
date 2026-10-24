@@ -1,7 +1,30 @@
+import { useNavigate } from "react-router-dom";
 import { PageContainer } from "../components/layout/PageContainer";
 import { PageHeader } from "../components/layout/PageHeader";
-import { PlaceholderPanel } from "../components/PlaceholderPanel";
+import { useArchive } from "../features/archive/ArchiveContext";
+import { ProjectForm } from "../features/project-form/ProjectForm";
+import { mapFormToProject } from "../features/project-form/projectMapping";
+import { emptyProjectFormValues } from "../features/project-form/projectFormSchema";
 
 export function AddProjectPage() {
-  return <><PageHeader eyebrow="Preserve the context" title="Add a sleeping project" description="Record the idea, the progress, and the precise point where momentum faded." /><PageContainer><PlaceholderPanel checkpoint={3} title="The project form is mapped and ready" description="A focused three-step flow will collect the original idea, where you stopped, and why it paused. This checkpoint establishes the route and shell only." /></PageContainer></>;
+  const { createProject } = useArchive();
+  const navigate = useNavigate();
+  return (
+    <>
+      <PageHeader eyebrow="Preserve the context" title="Add a sleeping project" description="Record the idea, the progress, and the precise point where momentum faded." />
+      <PageContainer>
+        <ProjectForm
+          mode="create"
+          initialValues={emptyProjectFormValues}
+          cancelTo="/"
+          onSubmitProject={(values) => {
+            const project = mapFormToProject(values);
+            const saved = createProject(project);
+            if (saved) navigate(`/projects/${project.id}`, { replace: true });
+            return saved;
+          }}
+        />
+      </PageContainer>
+    </>
+  );
 }

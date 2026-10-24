@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { LocalStorageProjectRepository, PROJECT_STORAGE_KEY } from "./projectRepository";
+import { seedProjects } from "./seedProjects";
 
 class MemoryStorage implements Storage {
   private readonly values = new Map<string, string>();
@@ -70,5 +71,37 @@ describe("LocalStorageProjectRepository", () => {
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.error.code).toBe("storage-write-failed");
     expect(storage.getItem(PROJECT_STORAGE_KEY)).toBe(before);
+  });
+
+  it("deletes the project and all nested related records as one aggregate", () => {
+    const storage = new MemoryStorage();
+    const repository = new LocalStorageProjectRepository(storage);
+    const initial = repository.list();
+    expect(initial.ok).toBe(true);
+    if (!initial.ok) return;
+    const target = initial.data.find((project) => project.timeline.length > 0 && project.memoryCapsule);
+    expect(target).toBeDefined();
+    if (!target) return;
+    expect(repository.delete(target.id).ok).toBe(true);
+    const deleted = repository.getById(target.id);
+    expect(deleted.ok).toBe(false);
+    if (!deleted.ok) expect(deleted.error.code).toBe("not-found");
+  });
+
+  it("persists a create, edit, reload, and delete lifecycle", () => {
+    const storage = new MemoryStorage();
+    const repository = new LocalStorageProjectRepository(storage);
+    const created = { ...seedProjects[0], id: "journey-project", name: "Journey project" };
+    expect(repository.create(created).ok).toBe(true);
+    const afterCreate = new LocalStorageProjectRepository(storage).getById(created.id);
+    expect(afterCreate.ok && afterCreate.data.name).toBe("Journey project");
+
+    const updated = { ...created, name: "Journey project edited", updatedAt: "2026-10-24T12:30:00.000Z" };
+    expect(repository.update(updated).ok).toBe(true);
+    const afterEditReload = new LocalStorageProjectRepository(storage).getById(created.id);
+    expect(afterEditReload.ok && afterEditReload.data.name).toBe("Journey project edited");
+
+    expect(repository.delete(created.id).ok).toBe(true);
+    expect(new LocalStorageProjectRepository(storage).getById(created.id).ok).toBe(false);
   });
 });

@@ -7,6 +7,9 @@ type ArchiveNotice = { type: "success" | "error"; message: string } | null;
 type ArchiveContextValue = {
   projects: Project[];
   notice: ArchiveNotice;
+  createProject: (project: Project) => boolean;
+  updateProject: (project: Project) => boolean;
+  deleteProject: (id: string) => boolean;
   toggleRevisitLater: (id: string, nextValue: boolean) => boolean;
   resetDemoData: () => boolean;
   dismissNotice: () => void;
@@ -18,6 +21,40 @@ export function ArchiveProvider({ children, repository = browserProjectRepositor
   const initial = useMemo(() => repository.list(), [repository]);
   const [projects, setProjects] = useState<Project[]>(initial.ok ? initial.data : []);
   const [notice, setNotice] = useState<ArchiveNotice>(initial.ok ? null : { type: "error", message: initial.error.message });
+
+  const createProject = useCallback((project: Project) => {
+    const result = repository.create(project);
+    if (!result.ok) {
+      setNotice({ type: "error", message: result.error.message });
+      return false;
+    }
+    setProjects((current) => [result.data, ...current]);
+    setNotice({ type: "success", message: `“${project.name}” was preserved in your archive.` });
+    return true;
+  }, [repository]);
+
+  const updateProject = useCallback((project: Project) => {
+    const result = repository.update(project);
+    if (!result.ok) {
+      setNotice({ type: "error", message: result.error.message });
+      return false;
+    }
+    setProjects((current) => current.map((candidate) => candidate.id === project.id ? result.data : candidate));
+    setNotice({ type: "success", message: `Changes to “${project.name}” were saved.` });
+    return true;
+  }, [repository]);
+
+  const deleteProject = useCallback((id: string) => {
+    const project = projects.find((candidate) => candidate.id === id);
+    const result = repository.delete(id);
+    if (!result.ok) {
+      setNotice({ type: "error", message: result.error.message });
+      return false;
+    }
+    setProjects((current) => current.filter((candidate) => candidate.id !== id));
+    setNotice({ type: "success", message: project ? `“${project.name}” was removed from this browser.` : "Project removed." });
+    return true;
+  }, [projects, repository]);
 
   const toggleRevisitLater = useCallback((id: string, nextValue: boolean) => {
     const result = repository.setRevisitLater(id, nextValue);
@@ -41,7 +78,7 @@ export function ArchiveProvider({ children, repository = browserProjectRepositor
     return true;
   }, [repository]);
 
-  const value = useMemo(() => ({ projects, notice, toggleRevisitLater, resetDemoData, dismissNotice: () => setNotice(null) }), [projects, notice, toggleRevisitLater, resetDemoData]);
+  const value = useMemo(() => ({ projects, notice, createProject, updateProject, deleteProject, toggleRevisitLater, resetDemoData, dismissNotice: () => setNotice(null) }), [projects, notice, createProject, updateProject, deleteProject, toggleRevisitLater, resetDemoData]);
   return <ArchiveContext.Provider value={value}>{children}</ArchiveContext.Provider>;
 }
 

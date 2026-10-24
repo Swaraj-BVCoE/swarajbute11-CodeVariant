@@ -85,3 +85,47 @@ Checkpoint 2 will add the typed project data model, a repository abstraction, ve
 ### Next checkpoint
 
 Checkpoint 3 will add the complete three-step create/edit form, draft recovery, navigation protection, validation, deletion, and timeline-aware project management. Do not start it without explicit approval.
+
+## Checkpoint 3 — Complete add, view, edit, and delete journeys
+
+**Status:** Completed on 24 October 2026.
+
+### Completed work
+
+- Added a reusable three-step React Hook Form and Zod project form.
+- Step 1 captures required name, description, intended outcome, technology tags, and optional repository/demo links.
+- Step 2 supports separate completed and unfinished work items, add/remove controls, current status, and historical dates.
+- Step 3 captures the abandonment reason, supporting notes, and the full Project Memory Capsule.
+- Added field-level validation, safe `http://`/`https://` URL checks, future-date prevention, and start/last-worked ordering checks.
+- Added Back/Continue navigation while preserving values and moving invalid submissions to the relevant step.
+- Added browser-local create-form draft autosaving with explicit restore/discard actions.
+- Successful project creation clears the saved create draft.
+- Added unsaved-change protection for page unload, in-app links, and browser Back navigation.
+- Added creation with stable IDs, ISO system timestamps, and a creation timeline event.
+- Added editing with existing values while preserving creation time, earlier timeline entries, rechecks, scope revisions, and decisions.
+- Meaningful edits append a dated timeline event rather than replacing project history.
+- Expanded project details with original intention, work state, Memory Capsule, important links, blocker context, dates, and timeline.
+- Added delete confirmation and aggregate deletion of the project plus every nested related record.
+- Added repository success/error feedback for create, update, and delete actions.
+
+### Checks completed
+
+- `pnpm typecheck` — passed.
+- `pnpm lint` — passed with no warnings.
+- `pnpm test` — 14 tests passed across persistence, complete CRUD lifecycle, validation, draft recovery, filtering, and history preservation.
+- `pnpm build` — passed with Vite 8.3.5; one non-blocking bundle-size advisory remains.
+- Development route response — HTTP 200 for `/projects/new`.
+
+### Verification limitation
+
+- Automated visual browser interaction was blocked by the browser-control URL security policy for the localhost tab. The restriction was not bypassed. UI journeys remain available for manual inspection through `pnpm dev`; repository lifecycle and form logic are covered by automated tests.
+
+### Known limitations
+
+- Browser Back protection uses the native confirmation dialog and returns to the form after cancellation; a future data-router migration could provide a fully custom blocker dialog.
+- Draft recovery is intentionally limited to the create form. Edit forms protect unsaved work but do not persist an edit draft.
+- Supabase, reflection/revival actions, and the optional 3D archive remain intentionally unimplemented.
+
+### Next checkpoint
+
+Checkpoint 4 will add Blocker Recheck, Shrink the Dream, repeatable revival decisions, and status/timeline consistency. Do not start it without explicit approval.
