@@ -209,6 +209,36 @@ button, a {
 .three-scene-fallback[data-webgl-fallback="true"]::before { width: 5.5rem; height: 5.5rem; }
 .three-scene-fallback[data-webgl-fallback="true"]::after { width: 7.5rem; height: 7.5rem; border-style: dashed; background: transparent; transform: translate(-50%, -50%) rotate(-18deg); }
 
+.hero-artifact-stage::before,
+.hero-artifact-stage::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+.hero-artifact-stage::before {
+  width: clamp(7rem, 34%, 10.5rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 35% 65% 58% 42% / 46% 38% 62% 54%;
+  background: radial-gradient(circle at 32% 28%, rgba(255,255,255,.9), transparent 8%),
+              linear-gradient(145deg, rgba(213,90,61,.92), rgba(99,102,241,.9) 46%, rgba(23,107,99,.94));
+  box-shadow: 0 0 55px rgba(99,102,241,.45), inset -18px -20px 34px rgba(6,12,29,.35);
+  rotate: 18deg;
+}
+.hero-artifact-stage::after {
+  width: clamp(12rem, 58%, 17rem);
+  aspect-ratio: 1.35;
+  border: 2px solid rgba(45,212,191,.55);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.06), 0 0 32px rgba(45,212,191,.15);
+  rotate: -12deg;
+}
+.hero-artifact-stage .three-scene-fallback { z-index: 1; }
+
 /* Custom refined scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -363,15 +393,22 @@ button, a {
 }
 
 /* Precision cursor for mouse/trackpad users; touch and reduced motion keep the native pointer. */
-.premium-cursor, .premium-cursor-dot { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; opacity: 0; }
-.premium-cursor { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1.5px solid rgba(47,107,255,.7); border-radius: 50%; background: rgba(255,255,255,.14); transition: width .18s, height .18s, margin .18s, opacity .18s, border-color .18s, background .18s; box-shadow: 0 6px 22px rgba(47,107,255,.12); backdrop-filter: blur(2px); }
-.premium-cursor span { position: absolute; left: 50%; top: -3px; width: 6px; height: 6px; border-radius: 50%; background: #ff725e; transform: translateX(-50%); box-shadow: 0 2px 9px rgba(255,114,94,.55); }
-.premium-cursor-dot { width: 4px; height: 4px; margin: -2px 0 0 -2px; border-radius: 50%; background: #252724; transition: opacity .18s; }
+.premium-cursor, .premium-cursor-dot { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; opacity: 0; will-change: transform; }
+.premium-cursor { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1.5px solid rgba(23,107,99,.8); border-radius: 50%; background: rgba(255,255,255,.18); transition: width .18s, height .18s, margin .18s, opacity .18s, border-color .18s, background .18s, scale .12s; box-shadow: 0 6px 22px rgba(23,107,99,.2), inset 0 0 0 1px rgba(255,255,255,.55); backdrop-filter: blur(2px); }
+.premium-cursor span { position: absolute; left: 50%; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: #d55a3d; transform: translateX(-50%); box-shadow: 0 2px 9px rgba(213,90,61,.55); }
+.premium-cursor-dot { width: 12px; height: 17px; margin: -2px 0 0 -2px; clip-path: polygon(0 0, 100% 68%, 58% 72%, 76% 100%, 57% 100%, 41% 75%, 8% 100%); background: #1e2927; filter: drop-shadow(0 1px 0 rgba(255,255,255,.95)) drop-shadow(0 2px 3px rgba(30,41,39,.35)); transition: opacity .12s, background-color .18s; }
 .premium-cursor[data-visible="true"], .premium-cursor-dot[data-visible="true"] { opacity: 1; }
-.premium-cursor[data-interactive="true"] { width: 52px; height: 52px; margin: -26px 0 0 -26px; border-color: rgba(255,114,94,.8); background: rgba(255,114,94,.08); }
+.premium-cursor[data-interactive="true"] { width: 48px; height: 48px; margin: -24px 0 0 -24px; border-color: rgba(213,90,61,.88); background: rgba(213,90,61,.09); }
+.premium-cursor[data-pressed="true"] { scale: .82; }
 
 @media (hover: hover) and (pointer: fine) {
-  body, a, button, input, textarea, select { cursor: none !important; }
+  html[data-premium-cursor="true"] body,
+  html[data-premium-cursor="true"] a,
+  html[data-premium-cursor="true"] button,
+  html[data-premium-cursor="true"] input,
+  html[data-premium-cursor="true"] textarea,
+  html[data-premium-cursor="true"] select,
+  html[data-premium-cursor="true"] [role="button"] { cursor: none !important; }
 }
 
 /* 3D Floating & Multi-Color Keyframes */
@@ -431,4 +468,7 @@ input:focus, select:focus, textarea:focus {
     transition-duration: 0.01ms !important;
   }
   .premium-cursor, .premium-cursor-dot { display: none; }
+  body { cursor: auto !important; }
+  a, button, [role="button"] { cursor: pointer !important; }
+  input, textarea { cursor: text !important; }
 }
