@@ -9,27 +9,27 @@ export function DesktopSettings() {
   const wallpapers = [
     {
       id: "aurora-light",
-      name: "Aurora Ivory (Default)",
-      preview: "from-amber-50 via-slate-50 to-indigo-50",
-      description: "Warm ivory with subtle layered gradients & prismatic depth",
+      name: "GNOME Adwaita Frost",
+      preview: "from-blue-50 via-slate-50 to-indigo-50",
+      description: "Crisp Adwaita slate with deep Linux typography and soft glass contrast",
     },
     {
       id: "alpine-breeze",
-      name: "Alpine Breeze",
-      preview: "from-sky-50 via-teal-50 to-emerald-50",
-      description: "Mint green and alpine tones inspired by open mountain air",
+      name: "Fedora Blue Wave",
+      preview: "from-sky-100 via-blue-50 to-slate-100",
+      description: "Signature Fedora oceanic tones tailored for high clarity and focus",
     },
     {
       id: "electric-sunset",
-      name: "Electric Twilight",
-      preview: "from-rose-50 via-purple-50 to-indigo-50",
-      description: "Vibrant violet and warm coral highlights with soft shadows",
+      name: "Ubuntu Yaru Aubergine",
+      preview: "from-orange-100 via-purple-50 to-indigo-100",
+      description: "Iconic Ubuntu warm orange & aubergine accents with smooth modern gradients",
     },
     {
       id: "clean-slate",
-      name: "Nordic Minimal",
-      preview: "from-slate-100 via-stone-50 to-zinc-100",
-      description: "Refined monochrome architectural style with high contrast",
+      name: "Pop!_OS Amber Slate",
+      preview: "from-amber-50 via-stone-50 to-slate-100",
+      description: "System76 Pop!_OS inspired warm titanium and technical amber finish",
     },
   ];
 

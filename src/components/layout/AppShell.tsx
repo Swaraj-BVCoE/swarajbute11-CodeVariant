@@ -7,6 +7,7 @@ import { MobileNavigation } from "./MobileNavigation";
 import { DesktopWorkspace } from "../desktop/DesktopWorkspace";
 import { DesktopProvider } from "../desktop/DesktopContext";
 import { PremiumCursor } from "../ui/PremiumCursor";
+import DarkModeToggle from "../ui/DarkModeToggle";
 
 export function AppShell() {
   const { notice, dismissNotice } = useArchive();
@@ -14,7 +15,7 @@ export function AppShell() {
   return (
     <DesktopProvider>
       <div className="relative min-h-screen w-full overflow-hidden bg-[var(--color-canvas)] text-[#252724]">
-        <PremiumCursor />
+        <PremiumCursor /><DarkModeToggle />
         <a
           href="#main-content"
           className="fixed left-4 top-4 z-50 -translate-y-24 rounded-lg bg-[#252724] px-4 py-2 font-medium text-white shadow-lg transition-transform focus:translate-y-0"

@@ -9,6 +9,7 @@ import { PageHeader } from "../components/layout/PageHeader";
 import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";
 import { Card, CardContent, CardHeader } from "../components/ui/Card";
+import { ReflectionStation } from "../features/archive/ReflectionStation";
 
 const ProjectArtifact3D = lazy(() => import("../components/3d/ProjectArtifact3D").then((module) => ({ default: module.ProjectArtifact3D })));
 
@@ -66,7 +67,7 @@ function DeleteProjectDialog({ open, projectName, onClose, onConfirm }: { open: 
 export function ProjectDetailsPage() {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const { projects, deleteProject } = useArchive();
+  const { projects, deleteProject, updateProject } = useArchive();
   const [deleteOpen, setDeleteOpen] = useState(false);
   const project = projects.find((candidate) => candidate.id === projectId);
 
@@ -131,6 +132,14 @@ export function ProjectDetailsPage() {
               <Clock3 className="size-3" /> Revisit saved
             </Badge>
           )}
+        </div>
+
+        {/* Reflection & Revival Station to solve sleeping ideas */}
+        <div className="mb-6">
+          <ReflectionStation
+            project={project}
+            onUpdateProject={(updated) => updateProject(updated)}
+          />
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.28fr)_minmax(21rem,0.72fr)]">

@@ -1,42 +1,45 @@
 @import "tailwindcss";
 
 :root {
+  transition: background-color 0.3s ease, color 0.3s ease;
   color-scheme: light;
 
-  /* Surfaces & Canvas */
-  --color-canvas: #FBF7F0;
+  /* Linux Desktop Inspired Color Combination: GNOME & Ubuntu Adwaita / Yaru Aesthetic */
+  /* Surfaces & Canvas: Warm crisp slate-tinted canvas with pristine window surfaces */
+  --color-canvas: #F4F6F9;
   --color-surface: #FFFFFF;
-  --color-surface-subtle: #F4F3EE;
-  --color-surface-muted: #EBEAE4;
-  --color-border: #E6E4DD;
-  --color-border-subtle: #EDECE6;
+  --color-surface-subtle: #EDF1F5;
+  --color-surface-muted: #E2E8F0;
+  --color-border: #D7DEE7;
+  --color-border-subtle: #E8EEF5;
 
-  /* Typography */
-  --color-charcoal: #1E2927;
-  --color-text-secondary: #55605D;
-  --color-text-muted: #858780;
+  /* Linux Adwaita & Yaru Charcoal Typography */
+  --color-charcoal: #181D27;
+  --color-text-secondary: #414B5C;
+  --color-text-muted: #64748B;
 
-  /* Premium Accents */
-  --color-olive: #176B63;
-  --color-olive-dark: #10524C;
-  --color-sage: #77A59C;
-  --color-sage-light: #E3F1ED;
-  --color-sage-subtle: #F0F7F4;
-  --color-champagne: #E3C9A6;
-  --color-bronze: #B36A3E;
-  --color-bronze-dark: #874626;
-  --color-terracotta: #D55A3D;
+  /* Signature Linux Accent Palette: Ubuntu Aubergine / Yaru Orange & Adwaita Blue */
+  --color-olive: #0F5B9E;
+  --color-olive-dark: #0A3D6B;
+  --color-sage: #2C7BE5;
+  --color-sage-light: #EBF3FC;
+  --color-sage-subtle: #F2F7FD;
+  --color-champagne: #FDE8D7;
+  --color-bronze: #E95420; /* Ubuntu Signature Yaru Orange */
+  --color-bronze-dark: #BF360C;
+  --color-terracotta: #E95420;
 
   /* Elevations */
-  --shadow-subtle: 0 1px 2px rgba(37, 39, 36, 0.04);
-  --shadow-card: 0 1px 3px rgba(37, 39, 36, 0.05), 0 8px 24px -6px rgba(37, 39, 36, 0.04);
-  --shadow-card-hover: 0 4px 6px -1px rgba(37, 39, 36, 0.06), 0 16px 36px -8px rgba(37, 39, 36, 0.08);
-  --shadow-elevated: 0 20px 40px -12px rgba(37, 39, 36, 0.12), 0 1px 2px rgba(37, 39, 36, 0.04);
+  --shadow-subtle: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 2px 5px rgba(15, 23, 42, 0.04), 0 10px 25px -5px rgba(15, 23, 42, 0.07);
+  --shadow-card-hover: 0 8px 16px -2px rgba(15, 23, 42, 0.08), 0 20px 40px -8px rgba(15, 23, 42, 0.12);
+  --shadow-elevated: 0 25px 50px -12px rgba(15, 23, 42, 0.18), 0 1px 3px rgba(15, 23, 42, 0.05);
   
-  --radius-card: 1rem;
-  --radius-button: 0.625rem;
+  --radius-card: 0.875rem;
+  --radius-button: 0.55rem;
 
-  font-family: "Aptos", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  /* Canonical Linux Font Stack: Ubuntu, Ubuntu Sans, Cantarell, DejaVu Sans */
+  font-family: "Ubuntu Sans", "Ubuntu", Cantarell, "DejaVu Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -61,21 +64,23 @@ body {
   overflow-x: hidden;
   background-color: var(--color-canvas);
   color: var(--color-charcoal);
+  font-family: "Ubuntu Sans", "Ubuntu", Cantarell, "DejaVu Sans", sans-serif;
 }
 
-/* Subtle, tactile background texture */
+/* Subtle, tactile Linux ambient wallpaper texture */
 body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
   content: "";
-  background-image: radial-gradient(circle at 100% 0%, rgba(216, 200, 168, 0.12) 0%, transparent 40%),
-                    radial-gradient(circle at 0% 100%, rgba(150, 163, 135, 0.08) 0%, transparent 45%);
+  background-image: radial-gradient(circle at 100% 0%, rgba(233, 84, 32, 0.08) 0%, transparent 45%),
+                    radial-gradient(circle at 0% 100%, rgba(44, 123, 229, 0.08) 0%, transparent 50%);
   pointer-events: none;
 }
 
 button, input, textarea, select {
-  font: inherit;
+  font-family: inherit;
+  font-size: inherit;
   color: inherit;
 }
 
@@ -84,18 +89,23 @@ button, a {
 }
 
 ::selection {
-  background-color: #E6EADF;
-  color: #252724;
+  background-color: #E95420;
+  color: #FFFFFF;
 }
 
-/* Editorial typography utilities */
+/* Linux typography utilities */
 .font-display {
-  font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  letter-spacing: -0.025em;
+  font-family: "Ubuntu", Cantarell, "Ubuntu Sans", sans-serif;
+  letter-spacing: -0.018em;
+  font-weight: 700;
 }
 
 .font-sans {
-  font-family: "Aptos", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  font-family: "Ubuntu Sans", "Ubuntu", Cantarell, "DejaVu Sans", sans-serif;
+}
+
+.font-mono {
+  font-family: "Fira Code", "JetBrains Mono", "DejaVu Sans Mono", monospace;
 }
 
 /* Canvas Protocol: cards execute actions only after a valid completed drop. */
@@ -184,7 +194,7 @@ button, a {
 .canvas-submit-panel { border-top: 1px solid #e5ded2; background: linear-gradient(145deg, #fffaf3, #f3faf7); padding: 1rem 1.5rem 1.5rem; }
 .canvas-submit-grid { display: grid; gap: 0.9rem; }
 .canvas-draft-card { border: 1px solid #d8ccb9; border-radius: 1rem; background: rgba(255, 255, 255, 0.94); padding: 3.15rem 1rem 1rem; box-shadow: 0 14px 35px -25px rgba(48, 39, 29, 0.65); }
-.canvas-draft-card h3 { margin: 0; color: #1e2927; font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif; font-size: 1.25rem; font-weight: 700; }
+.canvas-draft-card h3 { margin: 0; color: #181d27; font-family: "Ubuntu", Cantarell, "Ubuntu Sans", sans-serif; font-size: 1.25rem; font-weight: 700; }
 .canvas-draft-card p:not(.canvas-kicker) { margin: 0.25rem 0 0; color: #5d6663; font-size: 0.76rem; line-height: 1.45; }
 .canvas-kicker { margin: 0 0 0.15rem; color: #a14f2b; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
 .canvas-draft-meta { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.7rem; }
@@ -394,11 +404,11 @@ button, a {
 
 /* Precision cursor for mouse/trackpad users; touch and reduced motion keep the native pointer. */
 .premium-cursor, .premium-cursor-dot { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; opacity: 0; will-change: transform; }
-.premium-cursor { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1.5px solid rgba(23,107,99,.8); border-radius: 50%; background: rgba(255,255,255,.18); transition: width .18s, height .18s, margin .18s, opacity .18s, border-color .18s, background .18s, scale .12s; box-shadow: 0 6px 22px rgba(23,107,99,.2), inset 0 0 0 1px rgba(255,255,255,.55); backdrop-filter: blur(2px); }
-.premium-cursor span { position: absolute; left: 50%; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: #d55a3d; transform: translateX(-50%); box-shadow: 0 2px 9px rgba(213,90,61,.55); }
-.premium-cursor-dot { width: 12px; height: 17px; margin: -2px 0 0 -2px; clip-path: polygon(0 0, 100% 68%, 58% 72%, 76% 100%, 57% 100%, 41% 75%, 8% 100%); background: #1e2927; filter: drop-shadow(0 1px 0 rgba(255,255,255,.95)) drop-shadow(0 2px 3px rgba(30,41,39,.35)); transition: opacity .12s, background-color .18s; }
+.premium-cursor { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1.5px solid rgba(233,84,32,.85); border-radius: 50%; background: rgba(255,255,255,.18); transition: width .18s, height .18s, margin .18s, opacity .18s, border-color .18s, background .18s, scale .12s; box-shadow: 0 6px 22px rgba(233,84,32,.25), inset 0 0 0 1px rgba(255,255,255,.55); backdrop-filter: blur(2px); }
+.premium-cursor span { position: absolute; left: 50%; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: #E95420; transform: translateX(-50%); box-shadow: 0 2px 9px rgba(233,84,32,.6); }
+.premium-cursor-dot { width: 12px; height: 17px; margin: -2px 0 0 -2px; clip-path: polygon(0 0, 100% 68%, 58% 72%, 76% 100%, 57% 100%, 41% 75%, 8% 100%); background: #181D27; filter: drop-shadow(0 1px 0 rgba(255,255,255,.95)) drop-shadow(0 2px 3px rgba(24,29,39,.35)); transition: opacity .12s, background-color .18s; }
 .premium-cursor[data-visible="true"], .premium-cursor-dot[data-visible="true"] { opacity: 1; }
-.premium-cursor[data-interactive="true"] { width: 48px; height: 48px; margin: -24px 0 0 -24px; border-color: rgba(213,90,61,.88); background: rgba(213,90,61,.09); }
+.premium-cursor[data-interactive="true"] { width: 48px; height: 48px; margin: -24px 0 0 -24px; border-color: rgba(233,84,32,.9); background: rgba(233,84,32,.09); }
 .premium-cursor[data-pressed="true"] { scale: .82; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -440,9 +450,9 @@ button, a {
   animation: pulseGlow 4s ease-in-out infinite;
 }
 
-/* Multi-color gradient accents */
+/* Linux desktop gradient accents */
 .bg-gradient-aurora {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.12) 35%, rgba(6, 182, 212, 0.14) 70%, rgba(245, 158, 11, 0.12) 100%);
+  background: linear-gradient(135deg, rgba(233, 84, 32, 0.12) 0%, rgba(119, 33, 111, 0.1) 40%, rgba(44, 123, 229, 0.12) 100%);
 }
 
 .badge-3d-glow {
@@ -455,8 +465,22 @@ input, select, textarea {
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: #6366f1 !important;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  border-color: #E95420 !important;
+  box-shadow: 0 0 0 3px rgba(233, 84, 32, 0.22) !important;
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --color-canvas: #1a1a1a;
+  --color-surface: #2b2b2b;
+  --color-surface-subtle: #222;
+  --color-surface-muted: #2c2c2c;
+  --color-border: #333;
+  --color-border-subtle: #2a2a2a;
+  --color-charcoal: #e0e0e0;
+  --color-text-secondary: #c0c0c0;
+  --color-text-muted: #a0a0a0;
+  --color-olive: #0F5B9E; /* could keep same */
 }
 
 /* Accessibility */

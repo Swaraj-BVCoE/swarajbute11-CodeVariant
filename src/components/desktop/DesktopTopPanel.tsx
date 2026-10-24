@@ -40,34 +40,34 @@ export function DesktopTopPanel() {
   const currentWindow = activeWindowId ? windows[activeWindowId] : null;
 
   return (
-    <header className="relative z-50 flex h-8 w-full select-none items-center justify-between border-b border-white/60 bg-white/75 px-3 text-[13px] font-medium text-[#252724] shadow-xs backdrop-blur-xl">
-      <div className="flex items-center gap-2">
+    <header className="relative z-50 flex h-11 w-full select-none items-center justify-between border-b border-white/60 bg-white/85 px-4 text-sm font-medium text-[#181D27] shadow-xs backdrop-blur-xl transition-all">
+      <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => setLauncherOpen((prev) => !prev)}
-          className={`flex items-center gap-2 rounded-md px-2.5 py-0.5 text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all shadow-2xs ${
             launcherOpen
-              ? "bg-indigo-600 text-white shadow-xs"
-              : "text-[#252724] hover:bg-slate-200/60"
+              ? "bg-[#E95420] text-white shadow-xs"
+              : "bg-slate-100/90 text-[#181D27] hover:bg-slate-200/90 hover:text-black"
           }`}
           aria-label="Toggle Project Graveyard Activities launcher"
         >
           <span className="relative flex size-2.5 items-center justify-center">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-indigo-400 opacity-60"></span>
-            <span className="relative inline-flex size-2 rounded-full bg-indigo-600"></span>
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-orange-400 opacity-60"></span>
+            <span className="relative inline-flex size-2 rounded-full bg-[#E95420]"></span>
           </span>
-          <span>Activities</span>
+          <span className="tracking-wide">Activities</span>
         </button>
 
-        <div className="ml-1 flex items-center rounded-lg bg-slate-100/80 p-0.5 text-[11px] font-bold text-slate-600">
+        <div className="ml-1 flex items-center rounded-lg bg-slate-100/90 p-0.5 text-xs font-bold text-slate-600">
           {[1, 2].map((ws) => (
             <button
               key={ws}
               type="button"
               onClick={() => setActiveWorkspace(ws)}
-              className={`rounded-md px-2 py-0.5 transition-all ${
+              className={`rounded-md px-2.5 py-1 transition-all ${
                 activeWorkspace === ws
-                  ? "bg-white text-indigo-600 shadow-xs"
+                  ? "bg-white text-[#E95420] shadow-xs"
                   : "text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -77,9 +77,9 @@ export function DesktopTopPanel() {
         </div>
 
         {currentWindow && currentWindow.isOpen && !currentWindow.isMinimized && (
-          <div className="hidden items-center gap-1.5 border-l border-slate-300/60 pl-3 md:flex">
-            <span className="size-1.5 rounded-full bg-emerald-500" />
-            <span className="max-w-[200px] truncate text-xs font-semibold text-slate-800">
+          <div className="hidden items-center gap-2 border-l border-slate-300/60 pl-3.5 md:flex">
+            <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="max-w-[260px] truncate text-xs font-bold text-slate-800">
               {currentWindow.title}
             </span>
           </div>
@@ -90,16 +90,16 @@ export function DesktopTopPanel() {
         <button
           type="button"
           onClick={() => setControlCenterOpen(!controlCenterOpen)}
-          className="flex items-center gap-2 rounded-md px-2.5 py-0.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200/60"
+          className="flex items-center gap-2.5 rounded-lg px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-200/70"
         >
-          <span>{date}</span>
-          <span className="font-bold text-[#252724]">{time}</span>
+          <span className="text-slate-500">{date}</span>
+          <span className="font-bold text-[#181D27] text-[13px]">{time}</span>
         </button>
       </div>
 
-      <div className="flex items-center gap-1.5">
-        <div className="hidden items-center gap-1 text-[11px] font-medium text-slate-600 sm:flex">
-          <span className="rounded-full bg-indigo-50 px-2 py-0.5 font-semibold text-indigo-700">
+      <div className="flex items-center gap-2.5">
+        <div className="hidden items-center gap-1.5 text-xs font-medium text-slate-600 sm:flex">
+          <span className="rounded-full bg-orange-50 border border-orange-200/60 px-2.5 py-1 text-[11px] font-bold text-[#E95420]">
             {projects.length} artifacts
           </span>
         </div>
@@ -107,17 +107,17 @@ export function DesktopTopPanel() {
         <button
           type="button"
           onClick={() => setControlCenterOpen(!controlCenterOpen)}
-          className="flex items-center gap-2 rounded-md bg-slate-100/80 px-2 py-1 text-slate-700 transition hover:bg-slate-200/80"
+          className="flex items-center gap-2.5 rounded-lg bg-slate-100/90 px-2.5 py-1.5 text-slate-700 transition hover:bg-slate-200/90 shadow-2xs"
           aria-label="System status & controls"
         >
-          <Wifi className="size-3.5 text-slate-700" />
-          <Volume2 className="size-3.5 text-slate-700" />
-          <Battery className="size-3.5 text-emerald-600" />
+          <Wifi className="size-4 text-slate-700" />
+          <Volume2 className="size-4 text-slate-700" />
+          <Battery className="size-4 text-emerald-600" />
         </button>
       </div>
 
       {controlCenterOpen && (
-        <div className="absolute right-3 top-9 z-50 w-72 rounded-2xl border border-white/70 bg-white/95 p-4 text-[#252724] shadow-2xl backdrop-blur-2xl">
+        <div className="absolute right-3 top-12 z-50 w-72 rounded-2xl border border-white/70 bg-white/95 p-4 text-[#252724] shadow-2xl backdrop-blur-2xl">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
               Linux Desktop Shell

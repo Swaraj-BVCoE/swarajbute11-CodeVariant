@@ -57,18 +57,22 @@ export function DesktopWorkspace() {
     if (contextMenu) setContextMenu(null);
   };
 
-  // Dynamic wallpaper styling
+  // Dynamic Linux desktop wallpaper color combinations
   const getWallpaperBackground = () => {
     switch (wallpaper) {
       case "alpine-breeze":
-        return "bg-gradient-to-br from-[#EBF5EE] via-[#F4F9F5] to-[#E2EFE7]";
+        // Fedora Adwaita Blue & Silver
+        return "bg-gradient-to-br from-[#E6EEF8] via-[#EDF3FA] to-[#DBE7F6]";
       case "electric-sunset":
-        return "bg-gradient-to-br from-[#FDF2F4] via-[#FBF5FF] to-[#EFF4FE]";
+        // Ubuntu Signature Yaru Aubergine & Warm Sunset
+        return "bg-gradient-to-br from-[#FDF0EC] via-[#F8ECF5] to-[#EAE6F8]";
       case "clean-slate":
-        return "bg-gradient-to-br from-[#F5F5F7] via-[#FAFAFC] to-[#EDEDF2]";
+        // Pop!_OS Amber Slate
+        return "bg-gradient-to-br from-[#F6F7F9] via-[#FAF6F0] to-[#E9ECEF]";
       case "aurora-light":
       default:
-        return "bg-gradient-to-br from-[#FAF9F6] via-[#F7F5EE] to-[#EEF2F6]";
+        // Linux Adwaita & Yaru Slate
+        return "bg-gradient-to-br from-[#F1F4F8] via-[#F6F8FB] to-[#E5ECF4]";
     }
   };
 

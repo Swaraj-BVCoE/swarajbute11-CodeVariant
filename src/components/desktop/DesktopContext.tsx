@@ -27,6 +27,8 @@ interface DesktopContextType {
   restoreWindow: (id: WindowId) => void;
   focusWindow: (id: WindowId) => void;
   updatePosition: (id: WindowId, position: { x: number; y: number }) => void;
+  updateSize: (id: WindowId, size: { width: number; height: number }) => void;
+  updateBounds: (id: WindowId, bounds: { position: { x: number; y: number }; size: { width: number; height: number } }) => void;
   wallpaper: string;
   setWallpaper: (wp: string) => void;
   dockPosition: "bottom" | "left";
@@ -278,6 +280,27 @@ export function DesktopProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  const updateSize = useCallback((id: WindowId, size: { width: number; height: number }) => {
+    setWindows((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        size,
+      },
+    }));
+  }, []);
+
+  const updateBounds = useCallback((id: WindowId, bounds: { position: { x: number; y: number }; size: { width: number; height: number } }) => {
+    setWindows((prev) => ({
+      ...prev,
+      [id]: {
+        ...prev[id],
+        position: bounds.position,
+        size: bounds.size,
+      },
+    }));
+  }, []);
+
   useEffect(() => {
     window.localStorage.setItem("project-graveyard:wallpaper", wallpaper);
   }, [wallpaper]);
@@ -321,6 +344,8 @@ export function DesktopProvider({ children }: { children: React.ReactNode }) {
         restoreWindow,
         focusWindow,
         updatePosition,
+        updateSize,
+        updateBounds,
         wallpaper,
         setWallpaper,
         dockPosition,
