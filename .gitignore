@@ -7,6 +7,8 @@
 node_modules/
 dist/
 build/
+.vite/
+*.tsbuildinfo
 
 # Python environments and cache
 venv/
@@ -16,3 +18,5 @@ __pycache__/
 
 # Log files
 *.log
+.DS_Store
+Thumbs.db

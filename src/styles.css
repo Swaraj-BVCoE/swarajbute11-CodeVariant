@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --color-canvas: #080b12;
+  --color-surface: #0f1420;
+  --color-surface-raised: #151b29;
+  --color-violet: #8b7cf6;
+  --color-emerald: #5ee0ad;
+  --radius-card: 1.125rem;
+  --shadow-card: 0 18px 60px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html { min-width: 320px; background: var(--color-canvas); scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; min-height: 100vh; overflow-x: hidden; }
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background:
+    radial-gradient(circle at 72% -8%, rgba(118, 88, 220, 0.12), transparent 33rem),
+    radial-gradient(circle at 8% 82%, rgba(64, 175, 137, 0.05), transparent 30rem),
+    var(--color-canvas);
+}
+button, input { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+::selection { background: rgba(139, 124, 246, 0.35); color: white; }
+.font-display { font-family: "Segoe UI Variable Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
