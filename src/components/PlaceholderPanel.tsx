@@ -14,10 +14,10 @@ type PlaceholderPanelProps = {
 export function PlaceholderPanel({ checkpoint, title, description, children }: PlaceholderPanelProps) {
   return (
     <Card className="relative overflow-hidden">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-300/50 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#ff7f3f]/60 to-transparent" />
       <CardContent className="relative grid min-h-[24rem] place-items-center px-6 py-12 text-center">
         <div className="max-w-xl">
-          <span className="mx-auto mb-5 grid size-14 place-items-center rounded-2xl border border-violet-300/15 bg-violet-400/10 text-violet-200">
+          <span className="mx-auto mb-5 grid size-14 place-items-center rounded-2xl border border-[#ff9a60]/20 bg-[#ff6422]/10 text-[#ffb184]">
             <Construction className="size-6" aria-hidden="true" />
           </span>
           <Badge variant="violet"><Sparkles className="size-3" /> Checkpoint {checkpoint}</Badge>

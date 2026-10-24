@@ -1,4 +1,5 @@
 import { ArrowUpRight, Bookmark, BookmarkCheck, CheckCircle2, Circle, Clock3 } from "lucide-react";
+import type { CSSProperties, PointerEvent } from "react";
 import { Link } from "react-router-dom";
 import { abandonmentReasonLabels, type Project } from "../../domain/project";
 import { Card, CardContent } from "../../components/ui/Card";
@@ -14,9 +15,33 @@ function formatUpdatedDate(value: string) {
 export function ProjectCard({ project, onToggleRevisit }: { project: Project; onToggleRevisit: (id: string, nextValue: boolean) => void }) {
   const completed = project.workItems.filter((item) => item.completed).length;
   const remaining = project.workItems.length - completed;
+  const palettes = [
+    { gradient: "linear-gradient(90deg, #ff5b22, #ffd21c)", glow: "rgba(255,100,34,.45)" },
+    { gradient: "linear-gradient(90deg, #d8ff54, #ffd21c)", glow: "rgba(216,255,84,.35)" },
+    { gradient: "linear-gradient(90deg, #3168ff, #72a0ff)", glow: "rgba(49,104,255,.38)" },
+  ];
+  const palette = palettes[project.id.split("").reduce((sum, letter) => sum + letter.charCodeAt(0), 0) % palettes.length];
+  const cardStyle = { "--project-gradient": palette.gradient, "--project-glow": palette.glow } as CSSProperties;
+
+  const tiltCard = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width;
+    const y = (event.clientY - bounds.top) / bounds.height;
+    event.currentTarget.style.setProperty("--rx", `${(0.5 - y) * 5}deg`);
+    event.currentTarget.style.setProperty("--ry", `${(x - 0.5) * 6}deg`);
+    event.currentTarget.style.setProperty("--shine-x", `${x * 100}%`);
+    event.currentTarget.style.setProperty("--shine-y", `${y * 100}%`);
+  };
+
+  const resetTilt = (event: PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.style.setProperty("--rx", "0deg");
+    event.currentTarget.style.setProperty("--ry", "0deg");
+  };
 
   return (
-    <Card className="group flex h-full flex-col overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-violet-300/20 hover:shadow-[0_24px_80px_rgba(0,0,0,.3)]">
+    <Card className="project-card-3d group flex h-full flex-col overflow-hidden transition duration-300 hover:border-[#ffb47f]/25 hover:shadow-[0_32px_95px_rgba(0,0,0,.38)]" style={cardStyle} onPointerMove={tiltCard} onPointerLeave={resetTilt}>
+      <span className="project-accent" aria-hidden="true" />
       <CardContent className="flex flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
           <StatusBadge status={project.status} />
@@ -28,19 +53,19 @@ export function ProjectCard({ project, onToggleRevisit }: { project: Project; on
             aria-pressed={project.revisitLater}
             onClick={() => onToggleRevisit(project.id, !project.revisitLater)}
           >
-            {project.revisitLater ? <BookmarkCheck className="size-4 text-amber-300" /> : <Bookmark className="size-4" />}
+            {project.revisitLater ? <BookmarkCheck className="size-4 text-[#ffd21c]" /> : <Bookmark className="size-4" />}
           </Button>
         </div>
-        <Link to={`/projects/${project.id}`} className="mt-5 block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">
-          <h3 className="font-display text-xl font-bold tracking-tight text-white transition-colors group-hover:text-violet-100">{project.name}</h3>
+        <Link to={`/projects/${project.id}`} className="mt-5 block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ffd21c]">
+          <h3 className="font-display text-2xl font-bold tracking-[-0.035em] text-[#fffaf0] transition-colors group-hover:text-[#ffd868]">{project.name}</h3>
           <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-slate-400">{project.shortDescription}</p>
         </Link>
         <div className="mt-5 flex flex-wrap gap-1.5">
           {project.technologies.slice(0, 3).map((technology) => <Badge key={technology} variant="neutral">{technology}</Badge>)}
         </div>
         <div className="mt-5 grid grid-cols-2 gap-2 border-y border-white/[0.07] py-4 text-xs">
-          <span className="flex items-center gap-2 text-slate-400"><CheckCircle2 className="size-3.5 text-emerald-300" /> {completed} completed</span>
-          <span className="flex items-center gap-2 text-slate-400"><Circle className="size-3.5 text-violet-300" /> {remaining} unfinished</span>
+          <span className="flex items-center gap-2 text-slate-400"><CheckCircle2 className="size-3.5 text-[#d8ff54]" /> {completed} completed</span>
+          <span className="flex items-center gap-2 text-slate-400"><Circle className="size-3.5 text-[#ff9561]" /> {remaining} unfinished</span>
         </div>
         <div className="mt-4 flex items-center justify-between gap-4">
           <div className="min-w-0">

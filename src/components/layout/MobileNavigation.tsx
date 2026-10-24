@@ -5,7 +5,7 @@ import { navigationItems } from "./navigation";
 export function MobileNavigation() {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-white/10 bg-[#090c14]/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl lg:hidden"
+      className="mobile-dock fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-[1.4rem] border border-white/15 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-2xl lg:hidden"
       aria-label="Mobile navigation"
     >
       {navigationItems.map((item) => {
@@ -15,7 +15,7 @@ export function MobileNavigation() {
             key={item.to}
             to={item.to}
             end={item.to === "/"}
-            className={({ isActive }) => cn("flex min-w-0 flex-col items-center gap-1 rounded-lg py-1.5 text-[0.62rem] font-medium text-slate-500", isActive && "bg-violet-400/10 text-violet-200")}
+            className={({ isActive }) => cn("flex min-w-0 flex-col items-center gap-1 rounded-xl py-1.5 text-[0.62rem] font-semibold text-slate-500 transition", isActive && "bg-[#ffd21c] text-[#17130c] shadow-[0_6px_20px_rgba(255,210,28,.2)]")}
           >
             <Icon className="size-[1.15rem]" aria-hidden="true" />
             <span className="max-w-full truncate px-1">{item.label.replace(" Projects", "")}</span>

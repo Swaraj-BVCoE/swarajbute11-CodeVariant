@@ -7,7 +7,7 @@ export function Notice({ type, message, onDismiss }: { type: "success" | "error"
     <div
       className={cn(
         "fixed right-4 top-4 z-50 flex max-w-[calc(100vw-2rem)] items-start gap-3 rounded-xl border px-4 py-3 text-sm shadow-2xl backdrop-blur-xl sm:max-w-md",
-        type === "success" ? "border-emerald-300/20 bg-emerald-950/90 text-emerald-100" : "border-rose-300/20 bg-rose-950/90 text-rose-100",
+        type === "success" ? "border-[#d8ff54]/25 bg-[#1a240a]/95 text-[#edffb6]" : "border-rose-300/20 bg-rose-950/90 text-rose-100",
       )}
       role={type === "error" ? "alert" : "status"}
       aria-live="polite"
