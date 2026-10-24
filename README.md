@@ -6,7 +6,7 @@ The Project Graveyard is a reflective archive for unfinished ideas. It helps peo
 
 ## Current status
 
-Checkpoint 1 provides the application foundation: React, Vite, strict TypeScript, Tailwind CSS, routing, reusable UI primitives, and a responsive dashboard shell. Data persistence and project workflows intentionally begin in later checkpoints.
+Checkpoint 2 provides the functioning guest archive: typed project records, versioned localStorage persistence, first-run examples, live counts, search, filters, sorting, revisit toggles, and derived revived/archived views. Create and edit forms intentionally begin in Checkpoint 3.
 
 ## Run locally
 
@@ -24,6 +24,7 @@ Open the local URL printed by Vite (normally `http://localhost:5173`).
 ```bash
 pnpm typecheck
 pnpm lint
+pnpm test
 pnpm build
 ```
 
@@ -41,7 +42,13 @@ Unknown paths render the custom not-found page.
 
 ## Environment
 
-No environment variables are needed for Checkpoint 1. `.env.example` contains placeholders for the optional Supabase integration planned for Checkpoint 5. Never commit a populated `.env` file.
+No environment variables are needed for the guest archive. `.env.example` contains placeholders for the optional Supabase integration planned for Checkpoint 5. Never commit a populated `.env` file.
+
+## Guest data
+
+Guest projects are stored in this browser under a versioned localStorage record. Example projects are inserted only when the storage key has never existed. Removing all projects will therefore leave the archive empty after reload; examples return only through the confirmed **Reset demo** action.
+
+If stored data is malformed or a browser write fails, the interface reports the error rather than claiming success. Resetting demo data is the recovery path for malformed records.
 
 ## Structure
 
@@ -49,6 +56,9 @@ No environment variables are needed for Checkpoint 1. `.env.example` contains pl
 src/
   app/          Application routing
   components/   Layout and shared UI primitives
+  data/         Seed records and persistence implementation
+  domain/       Typed project model
+  features/     Archive state, filters, and UI
   lib/          Shared helpers
   pages/        Route-level pages
 ```

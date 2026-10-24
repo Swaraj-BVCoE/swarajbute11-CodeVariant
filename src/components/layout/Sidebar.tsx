@@ -2,10 +2,12 @@ import { MoonStar } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { Badge } from "../ui/Badge";
+import { useArchive } from "../../features/archive/ArchiveContext";
 import { Brand } from "./Brand";
 import { navigationItems } from "./navigation";
 
 export function Sidebar() {
+  const { projects } = useArchive();
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-[17.5rem] flex-col border-r border-white/[0.07] bg-[#090c14]/95 px-4 py-5 backdrop-blur-xl lg:flex">
       <div className="px-2 pb-8 pt-1"><Brand /></div>
@@ -46,7 +48,7 @@ export function Sidebar() {
           <Badge variant="emerald">Guest mode</Badge>
         </div>
         <p className="text-sm font-semibold text-slate-200">Your ideas stay close.</p>
-        <p className="mt-1 text-xs leading-5 text-slate-500">Browser-local saving arrives in Checkpoint 2.</p>
+        <p className="mt-1 text-xs leading-5 text-slate-500">{projects.length} {projects.length === 1 ? "project" : "projects"} stored in this browser.</p>
       </div>
     </aside>
   );

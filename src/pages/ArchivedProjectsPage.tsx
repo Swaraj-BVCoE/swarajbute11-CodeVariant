@@ -1,7 +1,10 @@
 import { PageContainer } from "../components/layout/PageContainer";
 import { PageHeader } from "../components/layout/PageHeader";
-import { PlaceholderPanel } from "../components/PlaceholderPanel";
+import { ArchiveGrid } from "../features/archive/ArchiveGrid";
+import { useArchive } from "../features/archive/ArchiveContext";
 
 export function ArchivedProjectsPage() {
-  return <><PageHeader eyebrow="Rest without regret" title="Archived projects" description="Ideas you chose not to pursue, preserved as useful history rather than erased." /><PageContainer><PlaceholderPanel checkpoint={2} title="The long-term archive is prepared" description="Archived status, filtering, and restoration pathways will connect to browser-local project data in later checkpoints." /></PageContainer></>;
+  const { projects } = useArchive();
+  const archivedProjects = projects.filter((project) => project.status === "archived");
+  return <><PageHeader eyebrow="Rest without regret" title="Archived projects" description="Ideas you chose not to pursue, preserved as useful history rather than erased." /><PageContainer><ArchiveGrid projects={archivedProjects} showStatusFilter={false} emptyTitle="The long-term archive is empty" emptyDescription="Choosing to archive a project later will preserve it here without asking for action." /></PageContainer></>;
 }

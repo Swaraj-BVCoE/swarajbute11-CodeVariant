@@ -1,7 +1,10 @@
 import { PageContainer } from "../components/layout/PageContainer";
 import { PageHeader } from "../components/layout/PageHeader";
-import { PlaceholderPanel } from "../components/PlaceholderPanel";
+import { ArchiveGrid } from "../features/archive/ArchiveGrid";
+import { useArchive } from "../features/archive/ArchiveContext";
 
 export function RevisitLaterPage() {
-  return <><PageHeader eyebrow="A quiet reminder" title="Revisit later" description="Ideas you intentionally set aside—kept visible without demanding attention today." /><PageContainer><PlaceholderPanel checkpoint={2} title="Your reflection queue will appear here" description="This view will be derived from real guest data, with search, filters, and a quick way back into each project’s story." /></PageContainer></>;
+  const { projects } = useArchive();
+  const revisitProjects = projects.filter((project) => project.revisitLater);
+  return <><PageHeader eyebrow="A quiet reminder" title="Revisit later" description="Ideas you intentionally set aside—kept visible without demanding attention today." /><PageContainer><ArchiveGrid projects={revisitProjects} emptyTitle="Nothing is waiting on you" emptyDescription="Use the bookmark on any project card when you want to return to it later." /></PageContainer></>;
 }

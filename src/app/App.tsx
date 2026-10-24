@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
+import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { AppShell } from "../components/layout/AppShell";
 import { AddProjectPage } from "../pages/AddProjectPage";
@@ -12,6 +13,10 @@ import { RevivedProjectsPage } from "../pages/RevivedProjectsPage";
 
 export function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   return (
     <AnimatePresence mode="wait">
